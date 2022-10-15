@@ -1,0 +1,10 @@
+.user-image {
+    width: 32px;
+    height: 32px;
+}
+
+.chart-container {
+    position: relative; 
+    height:300px; 
+    width:400px;
+}
