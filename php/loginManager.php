@@ -81,8 +81,7 @@ if ($_POST['action'] === "Register") {
             if (password_verify($password, $row['password'])) {
 
                 $_SESSION['id'] = $row['id'];
-                $_SESSION['name'] = $row['name'];
-                $_SESSION['surname'] = $row['surname'];
+                $_SESSION['fullname'] = $row['name']." ".$row['surname'];
 
                 echo json_encode(['success' => true]);
             } else

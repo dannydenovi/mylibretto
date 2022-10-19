@@ -68,6 +68,7 @@ session_start();
             <!--END USER IMAGE-->
           </a>
           <ul class="dropdown-menu text-small">
+            <!--TODO: Aggiungere il nome dell'utente-->
             <li><a class="dropdown-item" href="#">Impostazioni</a></li>
             <li><button role="button" id="logout-button" class="dropdown-item text-danger">Logout</button></li>
           </ul>
@@ -83,7 +84,7 @@ session_start();
         <!--BEGIN TITLE-->
         <h1>Dashboard</h1>
         <!--END TITLE-->
-        <h3>Riassunto carriera...</h3>
+        <h3>Riassunto carriera <?echo $_SESSION["fullname"];?>...</h3>
         <br>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
@@ -130,7 +131,11 @@ session_start();
               <div>
                 <div class="card-body">
                   <h4 class="card-title mt-3">Media voti</h4>
-                  <p class="card-text">Media voti: 30</p>
+                  <p class="card-text">
+                    Media aritmetica dei voti: 30
+                    <br>
+                    Media pesata dei voti: 30
+                  </p>
                   <div class="d-flex justify-content-between align-items-center">
                   </div>
                 </div>
@@ -146,7 +151,11 @@ session_start();
               <div>
                 <div class="card-body">
                   <h4 class="card-title">Tasse</h4>
-                  <p class="card-text">Pagate: 140€</p>
+                  <p class="card-text">
+                    Pagate: 140€
+                    <br>
+                    Non pagate: 60€
+                  </p>
                   <div class="d-flex justify-content-between align-items-center">
                   </div>
                 </div>
@@ -197,7 +206,7 @@ session_start();
                 src="https://quickchart.io/chart?c={type:'radialGauge',data:{datasets:[{data:[103.5]}]}, options: {domain: [0,110], animation: {animateRotate: true}, centerArea: {text: 103.5}}}">
               <div>
                 <div class="card-body">
-                  <h4 class="card-title">Voto Di Laurea</h4>
+                  <h4 class="card-title">Base Voto Di Laurea</h4>
 
                   <p class="card-text">Previsto: 103.5</p>
                   <br>
