@@ -1,0 +1,12 @@
+.user-image {
+    width: 32px;
+    height: 32px;
+}
+
+.table-responsive {
+    overflow-x: scroll;
+}
+
+.login-background {
+    background-color: #A6CEE3;
+}
