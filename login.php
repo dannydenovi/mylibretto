@@ -31,7 +31,7 @@ if (isset($_SESSION['id'])) {
     <title>MyLibretto - Login</title>
 </head>
 
-<body class="text-center" cz-shortcut-listen="true">
+<body class="text-center login-background" cz-shortcut-listen="true">
 
     <section class="vh-100 login-background">
         <div class="container py-5 h-100">
@@ -66,6 +66,9 @@ if (isset($_SESSION['id'])) {
 </html>
 <script src="./dist/js/loginManager.js"></script>
 <script>
+
+
+
     $("#register-login").click(function() {
         if ($("#register-login").text() == "Registrati") {
             generateRegister();
