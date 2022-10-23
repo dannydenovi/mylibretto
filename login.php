@@ -67,8 +67,6 @@ if (isset($_SESSION['id'])) {
 <script src="./dist/js/loginManager.js"></script>
 <script>
 
-
-
     $("#register-login").click(function() {
         if ($("#register-login").text() == "Registrati") {
             generateRegister();
@@ -89,13 +87,13 @@ if (isset($_SESSION['id'])) {
                 success: function(data) {
                     var json = JSON.parse(data);
                     if (json.success) {
-                        window.location.href = "index.php";
+                        window.location.href = "http://mylibrettoprogetto.altervista.org";
                     } else {
                         alert(json.error);
                     }
                 },
                 error: function(error) {
-                    console.log(error);
+                    console.log("Errore:" + error);
                 },
             });
         } else {
@@ -115,7 +113,6 @@ if (isset($_SESSION['id'])) {
                     passwordConfirmation: $("#password-confirmation").val()
                 },
                 success: function(data) {
-                    console.log(data);
                     json = JSON.parse(data);
                     var result = validate(json);
                     if (result) {
