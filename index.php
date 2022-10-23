@@ -20,8 +20,6 @@ if (!isset($_SESSION['id'])) {
   <link rel="stylesheet" href="dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="dist/css/style.css" />
 
-
-
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
 
@@ -34,7 +32,6 @@ if (!isset($_SESSION['id'])) {
 
   <title>MyLibretto</title>
 </head>
-
 <body>
   <!--BEGIN HEADER-->
   <header class="p-3 mb-3 border-bottom">
@@ -73,6 +70,7 @@ if (!isset($_SESSION['id'])) {
     </div>
   </header>
   <!--END HEADER-->
+
   <!--BEGIN MAIN-->
   <main class="container" id="main">
 
@@ -80,29 +78,26 @@ if (!isset($_SESSION['id'])) {
   <!--END MAIN-->
 
   <!--BEGIN FOOTER-->
-  <footer class="footer py-3 bg-light fixed-bottom">
+  <footer class="footer py-3 bg-light">
     <div class="container">
       <span class="text-muted">MyLibretto - Danny De Novi 2022 ©</span>
     </div>
   </footer>
   <!--END FOOTER-->
 </body>
-
-
 <script>
-
   var elements = [$("#dashboard"), $("#libretto")];
 
   $("#libretto").click(function() {
     $("#main").empty();
-    $("#main").load("libretto.html");
     selectedItemMenu($("#libretto"));
+    $("#main").load("libretto.html");
   });
 
   $("#dashboard").click(function() {
     $("#main").empty();
-    $("#main").load("dashboard.html");
     selectedItemMenu($("#dashboard"));
+    $("#main").load("dashboard.html");
   });
 
   function selectedItemMenu(activeElement){
@@ -115,13 +110,9 @@ if (!isset($_SESSION['id'])) {
     activeElement.removeClass("link-dark");
   }
 
-
   $("document").ready(function() {
     $("#main").load("dashboard.html");
   });
-
-
-
 
   $("#logout-button").click(function() {
     $.ajax({
@@ -133,5 +124,4 @@ if (!isset($_SESSION['id'])) {
     });
   });
 </script>
-
 </html>
