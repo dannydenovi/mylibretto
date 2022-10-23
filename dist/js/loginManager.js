@@ -92,8 +92,6 @@ function generateRegister() {
             for (var i = 0; i < universities.length; i++) {
                 $("#university").append(`<option value="${universities[i]}">${universities[i]}</option>`);
             }
-
-            console.log(universities);
         },
         error: function (error) {
             console.log(error);
