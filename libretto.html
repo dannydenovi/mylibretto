@@ -4,22 +4,22 @@
         <h1>Libretto</h1>
         <!--END TITLE-->
         <p>
-            Media aritmetica: 30
+            Media aritmetica: <span id="average"></span>
             <br>
-            Media pesata: 30
+            Media pesata: <span id="mean"></span>
 
         </p>
         <div class="row">
             <div>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubjectModal">
-                    Aggiungi Esame
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="addSubjButton">
+                    <i class="bi bi-plus"></i>Aggiungi Esame
                 </button>
             </div>
         </div>
         <br>
         <div class="row">
-            <div class="span12">
-                <table class="table table-striped table-hover" >
+            <div class="span12 table-responsive">
+                <table class="table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">Materia</th>
@@ -47,7 +47,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Aggiungi Materia</h1>
+                <h1 class="modal-title fs-5" id="addSubjectModalLabel">Aggiungi Materia</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -69,7 +69,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="mark" class="form-label">Voto (per la lode inserisci il suo valore)</label>
-                    <input type="number" class="form-control" id="mark" placeholder="Voto" min="18" max="39">
+                    <input type="number" class="form-control" id="mark" placeholder="Voto" min="18">
                 </div>
             </div>
             <div class="modal-footer">
@@ -81,42 +81,93 @@
 </div>
 
 <script>
+
+    var editSubjectID = 0;
+    var ADD_SUBJECT = 0;
+    var EDIT_SUBJECT = 1;
+    var addSubjectModalLabel = $("#addSubjectModalLabel")
+    var addModalButton = $("#addSubject")
+    var addSubjectButton = $("#addSubjButton")
+    var addSubjectModal = $("#addSubjectModal")
+    var subject = $("#subject")
+    var cfu = $("#cfu")
+    var professor = $("#professor")
+    var exam_date = $("#exam_date")
+    var mark = $("#mark")
+
+
+
     $(document).ready(function () {
         $("#addSubject").click(function () {
-            var subject = $("#subject").val();
-            var cfu = $("#cfu").val();
-            var professor = $("#professor").val();
-            var exam_date = $("#exam_date").val();
-            var mark = $("#mark").val();
-
-            $.ajax({
-                type: "POST",
-                url: "./php/exams.php",
-                data: {
-                    action: "setExams",
-                    subject: subject,
-                    cfu: cfu,
-                    professor: professor,
-                    exam_date: exam_date,
-                    mark: mark
-                },
-                cache: false,
-                success: function (data) {
-                    var json = JSON.parse(data);
-                    if (json.success) {
-                        $('#addSubjectModal').modal('hide');
-                        getExams();
-                    } else {
-                        alert(json.error);
-                    }
-                }
-            });
+            if (addModalButton.text() === "Aggiungi") {
+                addExam();
+            } else if (addModalButton.text() === "Modifica") {
+                editSingleExam();
+            }
         });
-
+        $("#addSubjButton").click(function () {
+            newModalInstance(0, {});
+        });
         getExams();
-        
     });
 
+
+
+    function convertDate(date) {
+        var date_new = new Date(date);
+        return new Intl.DateTimeFormat('it-IT').format(date_new);
+    }
+
+    function newModalInstance(mode, data) {
+        switch (mode) {
+            case 0:
+                addSubjectModalLabel.text("Aggiungi Materia")
+                addModalButton.text("Aggiungi")
+                break;
+            case 1:
+                addSubjectModalLabel.text("Modifica Materia")
+                addModalButton.text("Modifica")
+                break;
+        }
+
+        subject.removeClass("is-invalid");
+        cfu.removeClass("is-invalid");
+        professor.removeClass("is-invalid");
+        exam_date.removeClass("is-invalid");
+        mark.removeClass("is-invalid");
+
+
+        subject.val("" || data.subject);
+        cfu.val("" || data.cfu);
+        professor.val("" || data.professor);
+        exam_date.val("" || data.exam_date);
+        mark.val("" || data.mark);
+
+
+        addSubjectModal.modal("show");
+    }
+
+
+    // Edit Exam from id
+    function editExam(id) {
+        $.ajax({
+            url: "php/exams.php",
+            type: "POST",
+            data: {
+                "id": id,
+                "action": "getSingleExam"
+            },
+            success: function (data) {
+                var json = JSON.parse(data);
+                newModalInstance(EDIT_SUBJECT, json)
+            }
+        });
+
+        editSubjectID = id;
+    }
+
+
+    // Get all the exams from the database and display them in the table
     function getExams() {
         $.ajax({
             type: "POST",
@@ -128,27 +179,127 @@
             success: function (data) {
                 var json = JSON.parse(data);
                 if (!json.error) {
-                    var exams = json;
+                    var exams = json.exams;
+                    var max_laude = json.info.laude_value;
+                    var total_credits = parseInt(json.info.total_credits);
+                    var effective_credits = 0;
                     var html = "";
+                    var average = 0;
+                    var mean = 0;
                     $("#marksTable").empty();
                     for (var i = 0; i < exams.length; i++) {
-                        html += "<tr>";
+                        html += "<tr id=" + exams[i].id + ">";
                         html += "<td>" + exams[i].subject + "</td>";
                         html += "<td>" + exams[i].professor + "</td>";
-                        html += "<td>" + exams[i].exam_date + "</td>";
+                        html += "<td>" + convertDate(exams[i].exam_date) + "</td>";
                         html += "<td>" + exams[i].cfu + "</td>";
                         html += "<td>" + (exams[i].mark > 30 ? "30 e lode" : exams[i].mark) + "</td>";
                         html += "<td>";
-                        html += "<button type='button' class='btn btn-danger m-2' onclick='deleteExam(" + exams[i].id + ")'>Elimina</button>";
-                        html += "<button type='button' class='btn btn-warning' onclick='editExam(" + exams[i].id + ")'>Modifica</button></td>";
+                        html += "<button type='button' class='btn btn-warning' onclick='editExam(" + exams[i].id + ")'><i class='bi bi-pen' ></i></button>";
+                        html += "<button type='button' class='btn btn-danger m-2' onclick='deleteExam(" + exams[i].id + ")'><i class='bi bi-trash'></i></button></td>";
                         html += "</tr>";
+                        average += parseInt(exams[i].mark);
+                        mean += (parseInt(exams[i].mark) * parseInt(exams[i].cfu));
+                        effective_credits += parseInt(exams[i].cfu);
                     }
+                    average /= exams.length;
+                    mean /= effective_credits;
+
+                    $("#average").text(average.toFixed(2));
+                    $("#mean").text(mean.toFixed(2));
                     $("#marksTable").append(html);
+                    $("#mark").attr("max", max_laude);
                 } else {
                     alert(json.error);
                 }
             }
         });
     }
+
+    // Delete exam from id and refresh the table
+    function deleteExam(id) {
+        var tr = $("#" + id).closest('tr');
+        $.ajax({
+            method: 'POST',
+            url: "./php/exams.php",
+            data: {
+                action: "deleteExam",
+                id: id
+            },
+            cache: false,
+            success: function (result) {
+                var json = JSON.parse(result);
+                if (json.error)
+                    console.log(result);
+                else {
+                    tr.fadeOut(1000, function () {
+                        getExams();
+                    });
+                }
+            }
+        });
+    };
+
+    function validateExam(data) {
+        data.subject ? subject.addClass("is-invalid") : subject.removeClass("is-invalid");
+        data.cfu ? cfu.addClass("is-invalid") : cfu.removeClass("is-invalid");
+        data.professor ? professor.addClass("is-invalid") : professor.removeClass("is-invalid");
+        data.exam_date ? exam_date.addClass("is-invalid") : exam_date.removeClass("is-invalid");
+        data.mark ? mark.addClass("is-invalid") : mark.removeClass("is-invalid");
+    }
+
+    function addExam() {
+        $.ajax({
+            type: "POST",
+            url: "./php/exams.php",
+            data: {
+                action: "setExams",
+                subject: subject.val(),
+                cfu: cfu.val(),
+                professor: professor.val(),
+                exam_date: exam_date.val(),
+                mark: mark.val()
+            },
+            cache: false,
+            success: function (data) {
+                var json = JSON.parse(data);
+                console.log(json);
+                if (json.success) {
+                    $('#addSubjectModal').modal('hide');
+                    getExams();
+                } else {
+                    validateExam(json);
+                }
+            }
+        });
+    }
+
+    function editSingleExam() {
+        $.ajax({
+            type: "POST",
+            url: "./php/exams.php",
+            data: {
+                action: "editExam",
+                id: editSubjectID,
+                subject: subject.val(),
+                cfu: cfu.val(),
+                professor: professor.val(),
+                exam_date: exam_date.val(),
+                mark: mark.val()
+            },
+            cache: false,
+            success: function (data) {
+                var json = JSON.parse(data);
+                console.log(json);
+                if (json.success) {
+                    getExams();
+                    $('#addSubjectModal').modal('hide');
+                } else {
+                    validateExam(json);
+                }
+            }
+        });
+    }
+
 
 </script>
