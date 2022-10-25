@@ -43,14 +43,14 @@ if (!isset($_SESSION['id'])) {
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li>
-            <button class="btn nav-link px-2 link-secondary" id="dashboard">Dashboard</button>
+            <span class="nav-link px-2 link-secondary" id="dashboard">Dashboard</span>
           </li>
-          <li><button class="btn nav-link px-2 link-dark" id="libretto">Libretto</button></li>
+          <li><span class="nav-link px-2 link-dark" id="libretto">Libretto</span></li>
           <li>
-            <a href="#" class="nav-link px-2 link-dark">Orario Lezioni</a>
+            <span class="nav-link px-2 link-dark">Orario Lezioni</span>
           </li>
           <li>
-            <button class="btn nav-link px-2 link-dark" id="tasse" >Tasse</bitton>
+            <span class="nav-link px-2 link-dark" id="tasse" >Tasse</span>
           </li>
         </ul>
         <span class="me-3"><?echo $_SESSION["fullname"];?></span>
@@ -72,7 +72,7 @@ if (!isset($_SESSION['id'])) {
   <!--END HEADER-->
 
   <!--BEGIN MAIN-->
-  <main class="container" id="main">
+  <main class="container mb-5" id="main">
 
   </main>
   <!--END MAIN-->
@@ -80,7 +80,7 @@ if (!isset($_SESSION['id'])) {
   <!--BEGIN FOOTER-->
   <footer class="footer py-3 bg-light fixed-bottom mt-4">
     <div class="container">
-      <span class="text-muted">MyLibretto - Danny De Novi 2022 ©</span>
+      <a href="https://github.com/dannydenovi/mylibretto" class="text-muted">MyLibretto - Danny De Novi 2022 ©</a>
     </div>
   </footer>
   <!--END FOOTER-->
