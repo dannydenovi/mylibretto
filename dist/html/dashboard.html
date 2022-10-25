@@ -158,7 +158,7 @@
           }
           percentage = (parseFloat(paid) * 100) / parseFloat(total);
           percentage = percentage.toFixed(2);
-          $("#taxes").html("Saldo: "+ parseFloat(paid).toFixed(2) + "€/" + parseFloat(total).toFixed(2) + "€");
+          $("#taxes").html("Pagati: "+ parseFloat(paid).toFixed(2) + "€/" + parseFloat(total).toFixed(2) + "€");
           url = "https://quickchart.io/chart?c={type:'progressBar',data:{datasets:[{data:[" + percentage + "]}]}}";
           $("#taxesChart").attr("src", url);
       } else {
