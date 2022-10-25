@@ -38,18 +38,10 @@ if (isset($_SESSION['id'])) {
                 <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                     <div class="card shadow-2-strong" style="border-radius: 1rem;">
                         <div class="card-body p-5 text-center">
-                            <h3 class="mb-5" id="mode-text">Accedi</h3>
+                            <h3 class="" id="mode-text">Accedi</h3>
+                            <p class="text-danger" id="error"></p>
                             <div id="form-body">
-                                <div>
-                                    <p class="" style="display: none;">Errore password</p>
-                                </div>
-                                <div class="form-outline mb-4">
-                                    <input type="email" id="email" class="form-control form-control-lg" placeholder="Email" />
-                                </div>
-
-                                <div class="form-outline mb-4">
-                                    <input type="password" id="password" class="form-control form-control-lg" placeholder="Password" />
-                                </div>
+                                
                             </div>
 
                             <button class="btn btn-primary btn-lg btn-block" type="button" id="action">Login</button>
@@ -65,10 +57,14 @@ if (isset($_SESSION['id'])) {
 </html>
 <script src="./dist/js/loginManager.js"></script>
 <script>
+    $(document).ready(function() {
+        generateLogin();
+    });
 
     //Quando viene cliccato il tasto "Registrati" viene cambiato il testo del bottone e viene mostrato il form per la registrazione
     //È condizionato dal fatto che il bottone sia "Registrati" e non "Login"
     $("#register-login").click(function() {
+        $("#error").text("");
         if ($("#register-login").text() == "Registrati") {
             generateRegister();
         } else {
@@ -94,11 +90,13 @@ if (isset($_SESSION['id'])) {
                     if (json.success) {
                         window.location.href = "http://mylibrettoprogetto.altervista.org";
                     } else {
-                        alert(json.error);
+                        $("#error").text("Email o password errati");
+                        $("#email").addClass("is-invalid");
+                        $("#password").addClass("is-invalid");
                     }
                 },
                 error: function(error) {
-                    console.log("Errore:" + error);
+                    console.log(error);
                 },
             });
         } else {
@@ -126,7 +124,7 @@ if (isset($_SESSION['id'])) {
                     }
                 },
                 error: function(error) {
-                    console.log(error);
+                    $("#error").text("Email o password errati");
                 }
             });
         }

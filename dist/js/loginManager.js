@@ -7,9 +7,6 @@ const modeText = $("#mode-text");
 function generateLogin() {
     //Nel caso della generazione di un login viene fatto un append degli elementi necessari
     form.html(`
-        <div>
-            <p class="" style="display: none;">Errore password</p>
-        </div>
         <div class="form-outline mb-4">
             <input type="email" id="email" class="form-control form-control-lg"
                 placeholder="Email" />
@@ -41,9 +38,6 @@ function generateRegister() {
 
             //Vengono aggiunti i campi necessari alla registrazione
             form.html(`
-                <div>
-                    <p class="" style="display: none;">Errore password</p>
-                </div>
                 <div class="form-outline mb-4">
                     <input type="text" id="name" class="form-control form-control-lg"
                         placeholder="Nome" />
