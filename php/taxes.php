@@ -33,7 +33,7 @@ if($_POST["action"] === "setTax"){
     }
 } 
 else if ($_POST["action"] === "getTaxes") {
-    $sql = "SELECT * FROM taxes WHERE user_id = ".$_SESSION['id'];
+    $sql = "SELECT * FROM taxes WHERE user_id = ".$_SESSION['id'] . " ORDER BY date ASC";
     if($result = $connection->query($sql)){
         $taxes = [];
         while($row = $result->fetch_assoc()){
