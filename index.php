@@ -50,7 +50,7 @@ if (!isset($_SESSION['id'])) {
             <a href="#" class="nav-link px-2 link-dark">Orario Lezioni</a>
           </li>
           <li>
-            <a href="#" class="nav-link px-2 link-dark">Tasse</a>
+            <button class="btn nav-link px-2 link-dark" id="tasse" >Tasse</bitton>
           </li>
         </ul>
 
@@ -78,7 +78,7 @@ if (!isset($_SESSION['id'])) {
   <!--END MAIN-->
 
   <!--BEGIN FOOTER-->
-  <footer class="footer py-3 bg-light">
+  <footer class="footer py-3 bg-light fixed-bottom mt-4">
     <div class="container">
       <span class="text-muted">MyLibretto - Danny De Novi 2022 ©</span>
     </div>
@@ -86,7 +86,7 @@ if (!isset($_SESSION['id'])) {
   <!--END FOOTER-->
 </body>
 <script>
-  var elements = [$("#dashboard"), $("#libretto")];
+  var elements = [$("#dashboard"), $("#libretto"), $("#tasse")];
 
   $("#libretto").click(function() {
     $("#main").empty();
@@ -98,6 +98,12 @@ if (!isset($_SESSION['id'])) {
     $("#main").empty();
     selectedItemMenu($("#dashboard"));
     $("#main").load("dashboard.html");
+  });
+
+  $("#tasse").click(function() {
+    $("#main").empty();
+    selectedItemMenu($("#tasse"));
+    $("#main").load("tasse.html");
   });
 
   function selectedItemMenu(activeElement){
