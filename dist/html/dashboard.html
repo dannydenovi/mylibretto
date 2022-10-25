@@ -367,7 +367,7 @@
   }
 
 
-
+  //Questa funzione è responsabile di recuperare le lezioni del giorno
   function getTodaysClasses(){
     $.ajax({
       url: "../php/classes.php",
@@ -376,27 +376,27 @@
         action: "getClasses"
       },
       success: function(data) {
+        //Tramite questa variabile recupereremo il giorno corrente
         const dayOfWeekName = new Date().toLocaleString(
           'default', {weekday: 'long'}
         );
         var json = JSON.parse(data);
         var html = "";
         for(var i = 0; i < json.length; i++){
-          console.log(json[i])
+          //Se il giorno della lezione è uguale al giorno corrente, viene aggiunta alla lista 
           if(json[i].day === dayOfWeekName){
             html += "<tr><td>"+ json[i].name +"</td>";
             html += "<td>"+ json[i].timeStart +" - " + json[i].timeEnd  + "</td>";
             html += "<td>"+ json[i].place +"</td></tr>";
           }
         }
-        console.log(html)
         $("#todaysClassesTable").empty();
         $("#todaysClassesTable").append(html);
       }
     })
   }
 
-  //Quando il documento viene caricato vengono eseguite le funzioni che recuperano le tasse e le statistiche
+  //Quando il documento viene caricato vengono eseguite le funzioni che recuperano le tasse, le statistiche e le lezioni del giorno
   $("document").ready(function () {
     getTaxes();
     getStats();

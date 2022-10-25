@@ -173,6 +173,7 @@
 
 <script>
 
+    //Vengono definiti gli elementi
     var subject = $("#subject");
     var professor = $("#professor");
     var weekday = $("#weekday");
@@ -186,7 +187,8 @@
     var addClassButton = $("#addClass");
     var editClassId = 0;
 
-
+    //Al caricamento della pagina viene definito che se il tasto di aggiunta è stato premuto, viene generato un modal
+    //Vengono recuperate le lezioni
     $(document).ready(function() {
         $("#addClassBtn").click(function() {
             newModalInstance(ADD_CLASS, {});
@@ -230,7 +232,8 @@
     }
 
 
-
+    //Questa funzione controlla se vi sono dei campi relativi alle lezioni nel json
+    //In caso di esito positivo viene aggiunta la classe "is-invalid"
     function validation(data) {
         console.log(data)
         data.subject ? subject.addClass("is-invalid") : subject.removeClass("is-invalid")
@@ -241,7 +244,7 @@
         data.place ? place.addClass("is-invalid") : place.removeClass("is-invalid")
     }
 
-
+    //Questa funzione recupera tutte le lezioni per l'utente
     function getClasses(){
         $.ajax({
             url: "../php/classes.php",
@@ -267,8 +270,10 @@
                     var place = json[i].place;
                     var id = json[i].class_id;
 
+                    //Viene creato un elemento html per ogni lezione
                     var html = "<tr id="+ id +"><td>" + subject + "</td><td>" + professor + "</td><td>" + timeStart + " - " + timeEnd + "</td><td>" + place + "</td><td><button class='btn btn-warning m-2' onclick='editClass(" + id + ")'><i class='bi bi-pen'></i></button><button class='btn btn-danger m-2' onclick='deleteClass(" + id + ")'><i class='bi bi-trash'></i></button></td></tr>";
 
+                    //Viene aggiunto l'elemento html nella stringa corrispondente al giorno della settimana
                     if(weekday == "Monday"){
                         mondayHtml += html;
                     } else if(weekday == "Tuesday"){
@@ -283,6 +288,7 @@
                         saturdayHtml += html;
                     }
 
+                    //Viene aggiunto l'elemento html nella tabella corrispondente al giorno della settimana
                     $("#mondayTable").empty().append(mondayHtml);
                     $("#tuesdayTable").empty().append(tuesdayHtml);
                     $("#wednesdayTable").empty().append(wednesdayHtml);
@@ -294,6 +300,7 @@
         })
     }
 
+    //Questa funzione si occupa di aggiungere una lezione
     function setClass(){
         $.ajax({
             url: "../php/classes.php",
@@ -321,6 +328,7 @@
     }
 
 
+    //Questa funzione si occupa di modificare una lezione
     function deleteClass(id){
         var tr = $("#" + id).closest('tr');
         $.ajax({
@@ -342,6 +350,7 @@
         })
     }
 
+    //Questa funzione si occupa di ottenere i dati relativi ad una lezione per poter istanziare il modal
     function editClass(id){
         $.ajax({
             url: "../php/classes.php",
@@ -361,6 +370,7 @@
         })
     }
 
+    //Questa funzione si occupa di modificare una lezione
     function editSingleClass(){
         $.ajax({
             url: "../php/classes.php",
