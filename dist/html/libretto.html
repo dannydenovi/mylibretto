@@ -96,7 +96,10 @@
     var mark = $("#mark")
 
 
-
+    //Al caricamento della pagina viene definita la funzione che se cliccato sul tasto aggiungi
+    //Viene aggiunto un esame, se cliccato sul tasto modifica viene modificato l'esame
+    //Il tasto viene modificato in base al tasto che apre il modal
+    //Viene inoltre aggiornato il libretto
     $(document).ready(function () {
         $("#addSubject").click(function () {
             if (addModalButton.text() === "Aggiungi") {
@@ -113,23 +116,28 @@
 
 
 
+    //Questa funzione converte le date del database da yyyy-mm-dd a dd-mm-yyyy
     function convertDate(date) {
         var date_new = new Date(date);
         return new Intl.DateTimeFormat('it-IT').format(date_new);
     }
 
+    //Questa funzione si occupa di generare il modal corretto in base al tasto che lo apre
     function newModalInstance(mode, data) {
         switch (mode) {
             case 0:
+                //Nel caso in cui fosse in modalità aggiunta
                 addSubjectModalLabel.text("Aggiungi Materia")
                 addModalButton.text("Aggiungi")
                 break;
             case 1:
+                //Nel caso in cui fosse in modalità modifica
                 addSubjectModalLabel.text("Modifica Materia")
                 addModalButton.text("Modifica")
                 break;
         }
 
+        //Vengono rimosse le classi di errore
         subject.removeClass("is-invalid");
         cfu.removeClass("is-invalid");
         professor.removeClass("is-invalid");
@@ -137,18 +145,19 @@
         mark.removeClass("is-invalid");
 
 
+        //Vengono rimossi i valori se è un modal di aggiunta oppure utilizzati quelli passati in input se è un modal di modifica
         subject.val("" || data.subject);
         cfu.val("" || data.cfu);
         professor.val("" || data.professor);
         exam_date.val("" || data.exam_date);
         mark.val("" || data.mark);
 
-
+        //Viene mostrato il modal
         addSubjectModal.modal("show");
     }
 
 
-    // Edit Exam from id
+    // Questa funzione recupera i dati relativi ad un singolo esame tramite l'id
     function editExam(id) {
         $.ajax({
             url: "php/exams.php",
@@ -162,12 +171,12 @@
                 newModalInstance(EDIT_SUBJECT, json)
             }
         });
-
+        //Viene posto come id di modifica quello corrente
         editSubjectID = id;
     }
 
 
-    // Get all the exams from the database and display them in the table
+    // Vengono recuperati tutti gli esami e mostrati in tabella
     function getExams() {
         $.ajax({
             type: "POST",
@@ -202,9 +211,11 @@
                         mean += (parseInt(exams[i].mark) * parseInt(exams[i].cfu));
                         effective_credits += parseInt(exams[i].cfu);
                     }
+                    //Vengono calcolate la media aritmetica e la media ponderata
                     average /= exams.length;
                     mean /= effective_credits;
 
+                    //Vengono mostrati i dati relativi al libretto
                     $("#average").text(average.toFixed(2));
                     $("#mean").text(mean.toFixed(2));
                     $("#marksTable").append(html);
@@ -216,8 +227,9 @@
         });
     }
 
-    // Delete exam from id and refresh the table
+    // Elimina un esame tramite l'id
     function deleteExam(id) {
+        //Viene identificato l'elemento tabellare da eliminare più vicino all'elemento con quello specifico id
         var tr = $("#" + id).closest('tr');
         $.ajax({
             method: 'POST',
@@ -232,6 +244,7 @@
                 if (json.error)
                     console.log(result);
                 else {
+                    //Nel caso in cui non vi siano errori viene fatto un fadeout dell'elemento e aggiornata la lista
                     tr.fadeOut(1000, function () {
                         getExams();
                     });
@@ -240,6 +253,8 @@
         });
     };
 
+    //Questa funzione si occupa della validazione, nel caso in cui dovesse trovare il messaggio di errore
+    //Relativo all'elemento allora inserisce la classe "is-invalid"
     function validateExam(data) {
         data.subject ? subject.addClass("is-invalid") : subject.removeClass("is-invalid");
         data.cfu ? cfu.addClass("is-invalid") : cfu.removeClass("is-invalid");
@@ -248,6 +263,7 @@
         data.mark ? mark.addClass("is-invalid") : mark.removeClass("is-invalid");
     }
 
+    //Questa funzione si occupa di aggiungere un esame e di aggiorna la lista
     function addExam() {
         $.ajax({
             type: "POST",
@@ -274,6 +290,8 @@
         });
     }
 
+    //Questa funzione aggiunge un singolo esame e aggiorna la lista
+    //Nel caso in cui il backend non dovesse restituire success allora viene effettuata la validazione dei campi in base al json restituito
     function editSingleExam() {
         $.ajax({
             type: "POST",

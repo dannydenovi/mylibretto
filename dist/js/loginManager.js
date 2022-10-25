@@ -3,7 +3,9 @@ const modeButton = $("#register-login");
 const action = $("#action");
 const modeText = $("#mode-text");
 
+
 function generateLogin() {
+    //Nel caso della generazione di un login viene fatto un append degli elementi necessari
     form.html(`
         <div>
             <p class="" style="display: none;">Errore password</p>
@@ -18,21 +20,26 @@ function generateLogin() {
                 placeholder="Password" />
         </div>
     `);
+    //E viene cambiato il testo del bottone e del titolo
     modeText.text("Accedi");
     modeButton.text("Registrati");
     action.text("Login");
 }
 
 function generateRegister() {
+    //Nel caso della generazione di un register viene fatto un append degli elementi necessari
+    //Vengono recuperate le università italiane tramite un api
     var universities = []
     $.ajax({
         url: "http://universities.hipolabs.com/search?country=italy",
         type: "GET",
         success: function (data) {
+            //Vengono aggiunte le università ad un array
             for (var i = 0; i < data.length; i++) {
                 universities.push(data[i].name);
             }
 
+            //Vengono aggiunti i campi necessari alla registrazione
             form.html(`
                 <div>
                     <p class="" style="display: none;">Errore password</p>
@@ -89,6 +96,7 @@ function generateRegister() {
                 </div>
             `);
 
+            //Vengono aggiunte le università all'elemento select
             for (var i = 0; i < universities.length; i++) {
                 $("#university").append(`<option value="${universities[i]}">${universities[i]}</option>`);
             }
@@ -98,12 +106,16 @@ function generateRegister() {
         }
     });
 
+    //E viene cambiato il testo del bottone e del titolo
     modeText.text("Registrati");
     modeButton.text("Accedi");
     action.text("Registrati");
 }
 
 function validate(json) {
+    //Vengono controllati i campi del json
+    //Nel caso in cui dovesse trovare un riferimento allo specifico elemento vuol dire che il server ha restituito un errore sull'elemento in questione
+    //Viene aggiunta la classe "is-invalid" che evidenzia il campo in rosso
     if(!json.success) {
         if(json.name){
             $("#name").addClass("is-invalid");

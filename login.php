@@ -32,7 +32,6 @@ if (isset($_SESSION['id'])) {
 </head>
 
 <body class="text-center login-background" cz-shortcut-listen="true">
-
     <section class="vh-100 login-background">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
@@ -67,6 +66,8 @@ if (isset($_SESSION['id'])) {
 <script src="./dist/js/loginManager.js"></script>
 <script>
 
+    //Quando viene cliccato il tasto "Registrati" viene cambiato il testo del bottone e viene mostrato il form per la registrazione
+    //È condizionato dal fatto che il bottone sia "Registrati" e non "Login"
     $("#register-login").click(function() {
         if ($("#register-login").text() == "Registrati") {
             generateRegister();
@@ -74,6 +75,9 @@ if (isset($_SESSION['id'])) {
             generateLogin();
         }
     });
+
+    //Quando viene cliccato il tasto "Login" viene effettuato il login
+    //Nel caso in cui il bottone sia "Registrati" viene effettuata la registrazione
     $("#action").click(function() {
         if ($("#action").text() === "Login") {
             $.ajax({
@@ -85,6 +89,7 @@ if (isset($_SESSION['id'])) {
                     password: $("#password").val(),
                 },
                 success: function(data) {
+                    //Nel caso di successo viene reindirizzato alla pagina principale
                     var json = JSON.parse(data);
                     if (json.success) {
                         window.location.href = "http://mylibrettoprogetto.altervista.org";
@@ -113,6 +118,7 @@ if (isset($_SESSION['id'])) {
                     passwordConfirmation: $("#password-confirmation").val()
                 },
                 success: function(data) {
+                    //Nel caso di successo viene reindirizzato alla pagina principale per effettuare il login
                     json = JSON.parse(data);
                     var result = validate(json);
                     if (result) {

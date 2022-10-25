@@ -53,6 +53,7 @@ if (!isset($_SESSION['id'])) {
             <button class="btn nav-link px-2 link-dark" id="tasse" >Tasse</bitton>
           </li>
         </ul>
+        <span class="me-3"><?echo $_SESSION["fullname"];?></span>
 
         <div class="dropdown text-end">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -61,7 +62,6 @@ if (!isset($_SESSION['id'])) {
             <!--END USER IMAGE-->
           </a>
           <ul class="dropdown-menu text-small">
-            <!--TODO: Aggiungere il nome dell'utente-->
             <li><a class="dropdown-item" href="#">Impostazioni</a></li>
             <li><button role="button" id="logout-button" class="dropdown-item text-danger">Logout</button></li>
           </ul>
@@ -86,8 +86,11 @@ if (!isset($_SESSION['id'])) {
   <!--END FOOTER-->
 </body>
 <script>
+  //Array di pagine
   var elements = [$("#dashboard"), $("#libretto"), $("#tasse")];
 
+  //Al click su uno degli elementi presenti nella topbar
+  //Viene caricata la pagina corrispondente e viene aggiunta la classe active
   $("#libretto").click(function() {
     $("#main").empty();
     selectedItemMenu($("#libretto"));
@@ -106,6 +109,9 @@ if (!isset($_SESSION['id'])) {
     $("#main").load("dist/html/tasse.html");
   });
 
+
+  //Funzione che aggiunge la classe active all'elemento selezionato
+  //e rimuove la classe active agli altri elementi
   function selectedItemMenu(activeElement){
     for (var i = 0; i < elements.length; i++) {
       elements[i].removeClass("link-secondary");
@@ -116,10 +122,13 @@ if (!isset($_SESSION['id'])) {
     activeElement.removeClass("link-dark");
   }
 
+  //Al caricamento del documento viene caricata la pagina dashboard.html
   $("document").ready(function() {
     $("#main").load("dist/html/dashboard.html");
   });
 
+  //Al click sul logout viene eseguito il logout
+  //Viene effettuata una chiamata ajax per distruggere la sessione
   $("#logout-button").click(function() {
     $.ajax({
       url: "php/loginManager.php",

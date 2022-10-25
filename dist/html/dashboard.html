@@ -3,8 +3,7 @@
     <!--BEGIN TITLE-->
     <h1>Dashboard</h1>
     <!--END TITLE-->
-    <h3>Riassunto carriera
-      <?echo $_SESSION["fullname"];?>...
+    <h3>Riassunto carriera...
     </h3>
     <br>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -138,12 +137,13 @@
 <script>
 
 
-
+//Questa funzione converte la data dal formato yyyy-mm-dd al formato dd/mm/yyyy
   function convertDate(date) {
         var date_new = new Date(date);
         return new Intl.DateTimeFormat('it-IT').format(date_new);
   }
 
+  //Questa funzione recupera tutte le tasse relative all'utente loggato, identificato tramite l'id salvato in sessione
   function getTaxes(){
     $.ajax({
       url: "./php/taxes.php",
@@ -154,10 +154,13 @@
       success: function (data) {
         var json = JSON.parse(data);
         var url = ""
+        //Viene controllato se ci sono tasse
         if(json.taxes.length > 0){
           var total = 0;
           var paid = 0
           var percentage = 0;
+          //Viene calcolato il totale e il totale pagato delle tasse e viene calcolato il relativo percentuale di pagamento
+          //Viene effettuato un parsing a Float in quanto sul database per comodità sono salvati come stringhe
           for(var i = 0; i < json.taxes.length; i++){
             total += parseFloat(json.taxes[i].amount);
             paid += parseFloat(json.taxes[i].paid);
@@ -168,6 +171,7 @@
           url = "https://quickchart.io/chart?c={type:'progressBar',data:{datasets:[{data:[" + percentage + "]}]}}";
           $("#taxesChart").attr("src", url);
       } else {
+        //Nel caso in cui non dovessero essere presenti tasse viene mostrato un messaggio
         $("#taxes").html("Nessuna tassa da pagare");
         url = "https://quickchart.io/chart?c={type:'progressBar',data:{datasets:[{data:[100]}]}}";
         $("#taxesChart").attr("src", url);
@@ -179,6 +183,8 @@
     });
     }
 
+  //Questa funzione costruisce un grafico lineare che mostra l'andamento della media aritmetica e esponenziale nel tempo
+  //Vengono passati come parametri l'elemento in cui inserire l'esame (non è altro che un canvas), le date e le medie dei voti
   function buildLineChart(elem, labels, data, data2) {
     const myChart = new Chart(elem, {
       type: "line",
@@ -218,9 +224,11 @@
     return myChart;
   }
 
-  function buildPieChart(elem, type,labels, data) {
+  //Questa funzione costruisce un grafico a torta che mostra la distribuzione dei voti
+  //Vengono passati come parametri l'elemento in cui inserire il grafico (non è altro che un canvas), i voti e le relative frequenze
+  function buildPieChart(elem,labels, data) {
     const myChart = new Chart(elem, {
-      type: type,
+      type: "pie",
       data: {
         labels: labels,
 
@@ -256,11 +264,17 @@
     });
   }
 
+  //Questa funzione è responsabile di recuperare i dati relativi agli esami dell'utente loggato, identificato tramite l'id salvato in sessione
   function getStats() {
 
-    const average = document.getElementById('average').getContext('2d');
-    const averageElement = document.getElementById('marksQuantity').getContext('2d');
 
+    //Vengono identificati gli elementi html in cui inserire i grafici
+    const average = document.getElementById('average').getContext('2d');
+    const marksPie = document.getElementById('marksQuantity').getContext('2d');
+
+    //Viene effettuata una chiamata ajax per recuperare i dati relativi agli esami
+
+    //Vengono richiesti i cfu dell'utente
     $.ajax({
       url: "php/stats.php",
       type: "POST",
@@ -270,16 +284,17 @@
       success: function (data) {
         var json = JSON.parse(data);
         if (!json.error) {
-
+          //Se non vi sono errori viene mostrato il numero di cfu e costruito il grafico
+          //È importante recuperare i crediti totali e quelli ottenuti per poter calcolare il relativo percentuale e per identificare il dominio del grafico
           var missingCfu = parseInt(json.total_credits) - parseInt(json.cfu);
           $("#cfuLeft").html("Mancanti: " + (missingCfu || "180"));
           var url = "https://quickchart.io/chart?c={type:'radialGauge',data:{datasets:[{data:[" + parseInt(json.cfu) + "]}]}, options: {domain: [0," + parseInt(json.total_credits) + "]}}";
           $("#cfuGraph").attr("src", url);
-
         }
       }
     });
 
+    //Vengono richiesti i voti dell'utente in modo da poter calcolare le medie nel tempo e la distribuzione dei voti
     $.ajax({
       url: "php/stats.php",
       type: "POST",
@@ -288,6 +303,8 @@
       },
       success: function (data) {
         var json = JSON.parse(data);
+
+        //Se non vi sono errori nel json e non è nullo vengono eseguite le azioni seguenti...
         if (!json.error && json.exams != null) {
           var sumAverage = 0;
           var sumMean = 0
@@ -300,8 +317,9 @@
           var markFrequencies = {}; 
           var maxValue = "";
 
-          
+          //Vengono calcolate le medie aritmetica e esponenziale e vengono salvate le date, i voti e le medie in un array
           for (var i = 0; i < json.exams.length; i++) {
+            //Vengono convertite le date in formato dd/mm/yyyy
             dates.push(String(convertDate(json.exams[i].exam_date)));
             sumAverage += parseInt(json.exams[i].mark);
             sumMean += (parseInt(json.exams[i].mark) * parseInt(json.exams[i].cfu));
@@ -309,8 +327,10 @@
             averages.push((parseInt(sumAverage) / parseInt(i+1)).toFixed(2));
             mean.push((parseInt(sumMean) / parseInt(sumCfu)).toFixed(2));
 
+            //Se il voto è superiore a 30 allora viene identificato come 30 e lode e viene salvato come tale in un json
             var currentMark = json.exams[i].mark > 30 ? "30L" : json.exams[i].mark;
 
+            //Nel caso in cui dovesse trovarlo nella lista dei voti, viene incrementata la sua frequenza, altrimenti viene aggiunto alla lista
             if (currentMark in markFrequencies) {
               markFrequencies[currentMark] += 1;
             } else {
@@ -318,38 +338,45 @@
             }
           }
 
+          //Vengono salvati i voti e le frequenze in due array in modo tale da poter costruire il grafico
           for (var key in markFrequencies) {
             quantities.push(markFrequencies[key]);
             marks.push(key);
 
+            //Viene identificato il voto più frequente
             if (maxValue == "" || markFrequencies[key] > markFrequencies[maxValue]) {
               maxValue = key;
             }
           }
 
 
-          let indexHighest = marks.indexOf(Math.max(...marks));
-          $("#mostCommonMarkLabel").html("Voto più frequente: " + maxValue);
-          $("#averageLabel").html("Media aritmetica: " + averages[json.exams.length - 1] + "<br> Media ponderata: " + mean[json.exams.length - 1]);
-
+          //Viene calcolata la base del voto di laurea con la formula (media ponderata * 11) / 3 e viene costruito il grafico che è recuperato da una chiamata https
           var expectedDegreeMark =  ((mean[json.exams.length - 1]*11)/3).toFixed(2);
           var url = "https://quickchart.io/chart?c={type:'radialGauge',data:{datasets:[{data:["+ expectedDegreeMark+"]}]}, options: {domain: [0,110], animation: {animateRotate: true}, centerArea: {text: "+ expectedDegreeMark+"}}}";
-
-          var firstChart = buildLineChart(average, dates, averages, mean);
           $("#expectedDegreeMark").attr("src", url);
           $("#expectedDegreeMarkLabel").html("Previsto: " + expectedDegreeMark);
-          buildPieChart(averageElement, "pie", marks, quantities)
+
+          //Viene mostrata la media aritmetica e esponenziale nella card relativa alle medie e costruito il grafico
+          $("#averageLabel").html("Media aritmetica: " + averages[json.exams.length - 1] + "<br> Media ponderata: " + mean[json.exams.length - 1]);
+          buildLineChart(average, dates, averages, mean);
+
+          //Viene mostrato il voto più frequente nella card relativa ai voti e costruito il grafico a torta
+          $("#mostCommonMarkLabel").html("Voto più frequente: " + maxValue);
+          buildPieChart(marksPie, marks, quantities)
+
 
         } else {
+          //Se non vi sono esami allora vengono conservati gli elementi di base previsti dall'html e viene mostrato come base del voto di laurea 0
           var url = "https://quickchart.io/chart?c={type:'radialGauge',data:{datasets:[{data:["+ 0 +"]}]}, options: {domain: [0,110], animation: {animateRotate: true}, centerArea: {text: "+ 0 +"}}}";
           $("#expectedDegreeMark").attr("src", url);
           $("#expectedDegreeMarkLabel").html("Previsto: 0");
-
         }
       }
     })
   }
 
+
+  //Quando il documento viene caricato vengono eseguite le funzioni che recuperano le tasse e le statistiche
   $("document").ready(function () {
     getTaxes();
     getStats();
