@@ -43,11 +43,12 @@ else if($_POST["action"] === "editUser"){
     if(!$total_credits || !is_numeric($total_credits) || $total_credits < 0)
         $error["total_credits"] = "Crediti totali non validi";
 
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     if(count($error) > 0){
         echo json_encode($error);
     } else {
         if($password)
-            $sql = "UPDATE users SET name = '$name', surname = '$surname', email = '$email', password = '$password' WHERE id = " . $_SESSION["id"];
+            $sql = "UPDATE users SET name = '$name', surname = '$surname', email = '$email', password = '$hashedPassword' WHERE id = " . $_SESSION["id"];
         else
             $sql = "UPDATE users SET name = '$name', surname = '$surname', email = '$email' WHERE id = " . $_SESSION["id"];
         if($connection->query($sql)){
