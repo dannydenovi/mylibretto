@@ -1,0 +1,283 @@
+<div class="row">
+    <div class="col-12">
+        <!--BEGIN TITLE-->
+        <h1>Tasse</h1>
+        <!--END TITLE-->
+        <p>
+            Da saldare: <span id="toPay"></span>
+        </p>
+        <div class="row">
+            <div>
+                <button type="button" class="btn btn-primary" id="addTaxModalButton">
+                    <i class="bi bi-plus"></i>Aggiungi Tassa
+                </button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="span12 table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nome Tassa</th>
+                            <th scope="col">Saldato</th>
+                            <th scope="col">Totale</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taxTable">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+
+<!-- Modal tasse -->
+<div class="modal fade" id="addTaxModal" tabindex="-1" aria-labelledby="addTaxModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addTaxModalLabel">Aggiungi Tassa</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="tax_name" class="form-label">Nome Tassa</label>
+                    <input type="text" class="form-control" id="tax_name" placeholder="Nome Tassa">
+                </div>
+                <div class="mb-3">
+                    <label for="tax_date" class="form-label">Data</label>
+                    <input type="date" class="form-control" id="tax_date" placeholder="Data">
+                </div>
+                <div class="mb-3">
+                    <label for="tax_subtotal" class="form-label">Totale Tassa</label>
+                    <input type="number" class="form-control" id="tax_amount" placeholder="Totale Tassa" min="1"
+                        step="any">
+                </div>
+                <div class="mb-3">
+                    <label for="tax_paid" class="form-label">Pagato</label>
+                    <input type="number" class="form-control" id="tax_paid" placeholder="Pagato" min="0" step="any">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" id="addTax">Aggiungi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var taxName = $("#tax_name");
+    var taxDate = $("#tax_date");
+    var taxAmount = $("#tax_amount");
+    var taxPaid = $("#tax_paid");
+    var taxTable = $("#taxTable");
+    var addTaxModal = $("#addTaxModal");
+    var addTaxModalLabel = $("#addTaxModalLabel");
+    var addTaxButton = $("#addTax");
+    var ADD_SUBJECT = 0;
+    var EDIT_SUBJECT = 1;
+    var taxId = 0;
+
+    $("#addTaxModalButton").click(function () {
+       newModalInstance(ADD_SUBJECT, {});
+    });
+
+
+    $(document).ready(function () {
+        getTaxes();
+    });
+
+
+    function convertDate(date) {
+        var date_new = new Date(date);
+        return new Intl.DateTimeFormat('it-IT').format(date_new);
+    }
+
+
+    function newModalInstance(mode, data) {
+        switch (mode) {
+            case 0:
+                addTaxModalLabel.text("Aggiungi Tassa")
+                addTaxButton.text("Aggiungi")
+                break;
+            case 1:
+                addTaxModalLabel.text("Modifica Tassa")
+                addTaxButton.text("Modifica")
+                break;
+        }
+
+        taxName.removeClass("is-invalid");
+        taxDate.removeClass("is-invalid");
+        taxAmount.removeClass("is-invalid");
+        taxPaid.removeClass("is-invalid");
+
+
+        taxName.val("" || data.name);
+        taxDate.val("" || data.date);
+        taxAmount.val("" || data.amount);
+        taxPaid.val("" || data.paid);
+
+
+        addTaxModal.modal("show");
+    }
+
+
+
+    function validation(data) {
+        data.tax_name ? taxName.addClass("is-invalid") : taxName.removeClass("is-invalid");
+        data.tax_date ? taxDate.addClass("is-invalid") : taxDate.removeClass("is-invalid");
+        data.tax_amount ? taxAmount.addClass("is-invalid") : taxAmount.removeClass("is-invalid");
+        data.tax_paid ? taxPaid.addClass("is-invalid") : taxPaid.removeClass("is-invalid");
+    }
+
+    function getTaxes() {
+
+        var toPay = 0;
+
+        $.ajax({
+            url: "./php/taxes.php",
+            type: "POST",
+            data: {
+                action: "getTaxes"
+            },
+            success: function (data) {
+                var json = JSON.parse(data);
+                var html = ""
+                for (var i = 0; i < json.taxes.length; i++) {
+                    html += "<tr id=" + json.taxes[i].tax_id + ">";
+                    html += "<td>" + json.taxes[i].name + "</td>";
+                    html += "<td>" + parseFloat(json.taxes[i].paid).toFixed(2) + "€</td>";
+                    html += "<td>" + parseFloat(json.taxes[i].amount).toFixed(2) + "€</td>";
+                    html += "<td>" + convertDate(json.taxes[i].date) + "</td>";
+                    html += "<td>";
+                    html += "<button type='button' class='btn btn-warning' onclick='editTax(" + json.taxes[i].tax_id + ")'><i class='bi bi-pen' ></i></button>";
+                    html += "<button type='button' class='btn btn-danger m-2' onclick='deleteTax(" + json.taxes[i].tax_id + ")'><i class='bi bi-trash'></i></button></td>";
+                    html += "</tr>";
+                    toPay += parseFloat(json.taxes[i].amount) - parseFloat(json.taxes[i].paid);
+                }
+                taxTable.empty();
+                taxTable.append(html);
+                $("#toPay").text(toPay.toFixed(2) + "€");
+            },
+            error: function (data) {
+                console.log("Problema con la richiesta");
+            }
+        });
+    }
+
+    function setTax() {
+        $.ajax({
+            url: "php/taxes.php",
+            type: "POST",
+            data: {
+                action: "setTax",
+                tax_name: taxName.val(),
+                tax_date: taxDate.val(),
+                tax_amount: taxAmount.val(),
+                tax_paid: taxPaid.val()
+            },
+            success: function (data) {
+                var json = JSON.parse(data);
+
+                if (json.success) {
+                    getTaxes();
+                    $("#addTaxModal").modal("hide");
+                } else {
+                    validation(json);
+                }
+            },
+            error: function (data) {
+                console.log("Problema con la richiesta");
+            }
+        });
+    }
+
+
+    function deleteTax(id) {
+        var tr = $("#" + id).closest('tr');
+        $.ajax({
+            method: 'POST',
+            url: "./php/taxes.php",
+            data: {
+                action: "deleteTax",
+                id: id
+            },
+            cache: false,
+            success: function (result) {
+                var json = JSON.parse(result);
+                if (json.error)
+                    console.log(result);
+                else {
+                    tr.fadeOut(1000, function () {
+                        getTaxes();
+                    });
+                }
+            }
+        });
+    };
+
+    function editTax(id){
+        $.ajax({
+            method: 'POST',
+            url: "./php/taxes.php",
+            data: {
+                action: "getTax",
+                id: id
+            },
+            cache: false,
+            success: function (result) {
+                var json = JSON.parse(result);
+                console.log(json);
+                if (json.error)
+                    console.log(result);
+                else {
+                    taxId = id;
+                    newModalInstance(EDIT_SUBJECT, json);;
+                }
+            }
+        });
+    }
+
+    function editSingleTax(){
+        $.ajax({
+            method: 'POST',
+            url: "./php/taxes.php",
+            data: {
+                action: "editTax",
+                id: taxId,
+                tax_name: taxName.val(),
+                tax_date: taxDate.val(),
+                tax_amount: taxAmount.val(),
+                tax_paid: taxPaid.val()
+            },
+            cache: false,
+            success: function (result) {
+                var json = JSON.parse(result);
+                if (json.error)
+                    console.log(result);
+                else {
+                    getTaxes();
+                    $("#addTaxModal").modal("hide");
+                }
+            }
+        });
+    }
+
+
+
+
+    $("#addTax").click(function () {
+        if(addTaxButton.text() == "Aggiungi")
+            setTax();
+        else
+            editSingleTax();
+    });
+
+</script>

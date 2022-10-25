@@ -64,7 +64,7 @@
       <!--BEGIN CARD-->
       <div class="col">
         <div class="card shadow-sm h-100">
-          <img src="https://quickchart.io/chart?c={type:'progressBar',data:{datasets:[{data:[50]}]}}">
+          <img id="taxesChart" src="https://quickchart.io/chart?c={type:'progressBar',data:{datasets:[{data:[100]}]}}">
           <div>
             <div class="card-body">
               <h4 class="card-title">Tasse</h4>
@@ -144,6 +144,41 @@
         return new Intl.DateTimeFormat('it-IT').format(date_new);
   }
 
+  function getTaxes(){
+    $.ajax({
+      url: "./php/taxes.php",
+      type: "POST",
+      data: {
+        action: "getTaxes"
+      },
+      success: function (data) {
+        var json = JSON.parse(data);
+        var url = ""
+        if(json.taxes.length > 0){
+          var total = 0;
+          var paid = 0
+          var percentage = 0;
+          for(var i = 0; i < json.taxes.length; i++){
+            total += parseFloat(json.taxes[i].amount);
+            paid += parseFloat(json.taxes[i].paid);
+          }
+          percentage = (parseFloat(paid) * 100) / parseFloat(total);
+          percentage = percentage.toFixed(2);
+          $("#taxes").html("Saldo: "+ parseFloat(paid).toFixed(2) + "€/" + parseFloat(total).toFixed(2) + "€");
+          url = "https://quickchart.io/chart?c={type:'progressBar',data:{datasets:[{data:[" + percentage + "]}]}}";
+          $("#taxesChart").attr("src", url);
+      } else {
+        $("#taxes").html("Nessuna tassa da pagare");
+        url = "https://quickchart.io/chart?c={type:'progressBar',data:{datasets:[{data:[100]}]}}";
+        $("#taxesChart").attr("src", url);
+      }
+      },
+      error: function (data) {
+        console.log(data);
+      }
+    });
+    }
+
   function buildChart(elem, type, labels, data, data2) {
     const myChart = new Chart(elem, {
       type: type,
@@ -222,6 +257,7 @@
   }
 
   $("document").ready(function () {
+    getTaxes();
     $.ajax({
       url: "php/stats.php",
       type: "POST",
@@ -304,7 +340,6 @@
           buildPieChart(averageElement, "pie", marks, quantities)
 
         } else {
-          console.log(json.error)
           var url = "https://quickchart.io/chart?c={type:'radialGauge',data:{datasets:[{data:["+ 0 +"]}]}, options: {domain: [0,110], animation: {animateRotate: true}, centerArea: {text: "+ 0 +"}}}";
           $("#expectedDegreeMark").attr("src", url);
           $("#expectedDegreeMarkLabel").html("Previsto: 0");
