@@ -47,7 +47,7 @@ if (!isset($_SESSION['id'])) {
           </li>
           <li><span class="nav-link px-2 link-dark" id="libretto">Libretto</span></li>
           <li>
-            <span class="nav-link px-2 link-dark">Orario Lezioni</span>
+            <span class="nav-link px-2 link-dark" id="orarioLezioni">Orario Lezioni</span>
           </li>
           <li>
             <span class="nav-link px-2 link-dark" id="tasse" >Tasse</span>
@@ -87,7 +87,7 @@ if (!isset($_SESSION['id'])) {
 </body>
 <script>
   //Array di pagine
-  var elements = [$("#dashboard"), $("#libretto"), $("#tasse")];
+  var elements = [$("#dashboard"), $("#libretto"), $("#tasse"), $("#orarioLezioni")];
 
   //Al click su uno degli elementi presenti nella topbar
   //Viene caricata la pagina corrispondente e viene aggiunta la classe active
@@ -107,6 +107,12 @@ if (!isset($_SESSION['id'])) {
     $("#main").empty();
     selectedItemMenu($("#tasse"));
     $("#main").load("dist/html/tasse.html");
+  });
+
+  $("#orarioLezioni").click(function() {
+    $("#main").empty();
+    selectedItemMenu($("#orarioLezioni"));
+    $("#main").load("dist/html/orariolezioni.html");
   });
 
 
