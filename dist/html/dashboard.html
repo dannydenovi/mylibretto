@@ -179,9 +179,9 @@
     });
     }
 
-  function buildChart(elem, type, labels, data, data2) {
+  function buildLineChart(elem, labels, data, data2) {
     const myChart = new Chart(elem, {
-      type: type,
+      type: "line",
       data: {
         labels: labels,
         datasets: [{
@@ -256,8 +256,11 @@
     });
   }
 
-  $("document").ready(function () {
-    getTaxes();
+  function getStats() {
+
+    const average = document.getElementById('average').getContext('2d');
+    const averageElement = document.getElementById('marksQuantity').getContext('2d');
+
     $.ajax({
       url: "php/stats.php",
       type: "POST",
@@ -277,8 +280,6 @@
       }
     });
 
-    const average = document.getElementById('average').getContext('2d');
-    const averageElement = document.getElementById('marksQuantity').getContext('2d');
     $.ajax({
       url: "php/stats.php",
       type: "POST",
@@ -334,7 +335,7 @@
           var expectedDegreeMark =  ((mean[json.exams.length - 1]*11)/3).toFixed(2);
           var url = "https://quickchart.io/chart?c={type:'radialGauge',data:{datasets:[{data:["+ expectedDegreeMark+"]}]}, options: {domain: [0,110], animation: {animateRotate: true}, centerArea: {text: "+ expectedDegreeMark+"}}}";
 
-          var firstChart = buildChart(average, "line", dates, averages, mean);
+          var firstChart = buildLineChart(average, dates, averages, mean);
           $("#expectedDegreeMark").attr("src", url);
           $("#expectedDegreeMarkLabel").html("Previsto: " + expectedDegreeMark);
           buildPieChart(averageElement, "pie", marks, quantities)
@@ -347,8 +348,11 @@
         }
       }
     })
+  }
 
-
+  $("document").ready(function () {
+    getTaxes();
+    getStats();
   });
 
 

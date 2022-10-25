@@ -91,19 +91,19 @@ if (!isset($_SESSION['id'])) {
   $("#libretto").click(function() {
     $("#main").empty();
     selectedItemMenu($("#libretto"));
-    $("#main").load("libretto.html");
+    $("#main").load("dist/html/libretto.html");
   });
 
   $("#dashboard").click(function() {
     $("#main").empty();
     selectedItemMenu($("#dashboard"));
-    $("#main").load("dashboard.html");
+    $("#main").load("dist/html/dashboard.html");
   });
 
   $("#tasse").click(function() {
     $("#main").empty();
     selectedItemMenu($("#tasse"));
-    $("#main").load("tasse.html");
+    $("#main").load("dist/html/tasse.html");
   });
 
   function selectedItemMenu(activeElement){
@@ -117,7 +117,7 @@ if (!isset($_SESSION['id'])) {
   }
 
   $("document").ready(function() {
-    $("#main").load("dashboard.html");
+    $("#main").load("dist/html/dashboard.html");
   });
 
   $("#logout-button").click(function() {
