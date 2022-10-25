@@ -82,13 +82,13 @@
     var addTaxModal = $("#addTaxModal");
     var addTaxModalLabel = $("#addTaxModalLabel");
     var addTaxButton = $("#addTax");
-    var ADD_SUBJECT = 0;
-    var EDIT_SUBJECT = 1;
+    var ADD_TAX = 0;
+    var EDIT_TAX = 1;
     var taxId = 0;
 
     //Viene definita la funzione per aggiungere una tassa
     $("#addTaxModalButton").click(function () {
-       newModalInstance(ADD_SUBJECT, {});
+       newModalInstance(ADD_TAX, {});
     });
 
     //Al caricamento del documento viene caricata la tabella delle tasse
@@ -150,7 +150,7 @@
         var toPay = 0;
 
         $.ajax({
-            url: "./php/taxes.php",
+            url: "../php/taxes.php",
             type: "POST",
             data: {
                 action: "getTaxes"
@@ -165,7 +165,7 @@
                     html += "<td>" + parseFloat(json.taxes[i].amount).toFixed(2) + "€</td>";
                     html += "<td>" + convertDate(json.taxes[i].date) + "</td>";
                     html += "<td>";
-                    html += "<button type='button' class='btn btn-warning' onclick='editTax(" + json.taxes[i].tax_id + ")'><i class='bi bi-pen' ></i></button>";
+                    html += "<button type='button' class='btn btn-warning m-2' onclick='editTax(" + json.taxes[i].tax_id + ")'><i class='bi bi-pen' ></i></button>";
                     html += "<button type='button' class='btn btn-danger m-2' onclick='deleteTax(" + json.taxes[i].tax_id + ")'><i class='bi bi-trash'></i></button></td>";
                     html += "</tr>";
                     toPay += parseFloat(json.taxes[i].amount) - parseFloat(json.taxes[i].paid);
@@ -184,7 +184,7 @@
     //Questa funzione si occupa di aggiungere una tassa
     function setTax() {
         $.ajax({
-            url: "php/taxes.php",
+            url: "../php/taxes.php",
             type: "POST",
             data: {
                 action: "setTax",
@@ -216,7 +216,7 @@
         var tr = $("#" + id).closest('tr');
         $.ajax({
             method: 'POST',
-            url: "./php/taxes.php",
+            url: "../php/taxes.php",
             data: {
                 action: "deleteTax",
                 id: id
@@ -240,7 +240,7 @@
     function editTax(id){
         $.ajax({
             method: 'POST',
-            url: "./php/taxes.php",
+            url: "../php/taxes.php",
             data: {
                 action: "getTax",
                 id: id
@@ -255,7 +255,7 @@
                     //Nel caso in cui non ci fossero errori viene mostrato il modal con i dati della tassa
                     //e viene impostato l'id della tassa
                     taxId = id;
-                    newModalInstance(EDIT_SUBJECT, json);;
+                    newModalInstance(EDIT_TAX, json);;
                 }
             }
         });
@@ -266,7 +266,7 @@
     function editSingleTax(){
         $.ajax({
             method: 'POST',
-            url: "./php/taxes.php",
+            url: "../php/taxes.php",
             data: {
                 action: "editTax",
                 id: taxId,
