@@ -1,9 +1,9 @@
 <div class="row">
   <div class="col-12">
     <!--BEGIN TITLE-->
-    <h1>Dashboard</h1>
+    <h1 id="university"></h1>
     <!--END TITLE-->
-    <h3>Riassunto carriera...
+    <h3 id="course">
     </h3>
     <br>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -132,6 +132,20 @@
   function convertDate(date) {
         var date_new = new Date(date);
         return new Intl.DateTimeFormat('it-IT').format(date_new);
+  }
+  function getUniversity(){
+    $.ajax({
+      url: "./php/user.php",
+      type: "POST",
+      data: {
+        action: "getInfo"
+      },
+      success: function(data){
+        var json = JSON.parse(data);
+        $("#university").text(json.university);
+        $("#course").text(json.faculty);
+      }
+    });
   }
 
   //Questa funzione recupera tutte le tasse relative all'utente loggato, identificato tramite l'id salvato in sessione
@@ -401,6 +415,7 @@
     getTaxes();
     getStats();
     getTodaysClasses();
+    getUniversity();
   });
 
 

@@ -133,7 +133,7 @@ if (!isset($_SESSION['id'])) {
     activeElement.addClass("link-secondary");
     activeElement.removeClass("link-dark");
   }
-  
+
   //Acqiuisizione dei dati dell'utente
   function getNameSurname(){
     $.ajax({
