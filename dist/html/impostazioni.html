@@ -1,0 +1,159 @@
+<div class="row">
+    <div class="col-12">
+        <!--BEGIN TITLE-->
+        <h1>Impostazioni</h1>
+        <!--END TITLE-->
+        <br>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="name" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="name" placeholder="Nome">
+            </div>
+            <div class="col-md-4">
+                <label for="surname" class="form-label">Cognome</label>
+                <input type="text" class="form-control" id="surname" placeholder="Cognome">
+            </div>
+            <div class="col-md-4">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email">
+            </div>
+            <div class="col-md-6">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+            </div>
+            <div class="col-md-6">
+                <label for="passwordConfirmation" class="form-label">Conferma Password</label>
+                <input type="password" class="form-control" id="passwordConfirmation" placeholder="Conferma Password">
+            </div>
+            <div class="col-md-4">
+                <label for="inputAddress" class="form-label">Università</label>
+                <select id="university" class="form-select"> 
+                    <option disabled selected>Seleziona la tua Università</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="faculty" class="form-label">Facoltà</label>
+                <input type="text" class="form-control" id="faculty" placeholder="Facoltà">
+            </div>
+            <div class="col-md-2">
+                <label for="laudeValue" class="form-label">Valore Lode</label>
+                <input type="text" class="form-control" id="laudeValue" placeholder="Valore Lode">
+            </div>
+            <div class="col-md-2">
+                <label for="cfu" class="form-label">Totale CFU</label>
+                <input type="text" class="form-control" id="cfu" placeholder="Totale CFU">
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-primary" id="editUser">Modifica</button>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+<script>
+
+
+
+
+
+    function getInfo(){
+        $.ajax({
+            url: "../php/user.php",
+            type: "POST",
+            data: {
+                action: "getInfo"
+            },
+            success: function(data) {
+                var json = JSON.parse(data);
+                $("#name").val(json.name);
+                $("#surname").val(json.surname);
+                $("#email").val(json.email);
+                $("#university").val(json.university);
+                $("#faculty").val(json.faculty);
+                $("#laudeValue").val(json.laude_value);
+                $("#cfu").val(json.total_credits);
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    }
+
+    function getUniversities(){
+        $.ajax({
+        url: "http://universities.hipolabs.com/search?country=italy",
+        type: "GET",
+        success: function (data) {
+            //Vengono aggiunte le università all'elemento select
+            for (var i = 0; i < data.length; i++) {
+                $("#university").append(`<option value="${data[i].name}">${data[i].name}</option>`);
+            }
+            getInfo();
+
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+    }
+
+    function validation(data){
+        var name = $("#name");
+        var surname = $("#surname");
+        var email = $("#email");
+        var password = $("#password");
+        var passwordConfirmation = $("#passwordConfirmation");
+        var university = $("#university");
+        var faculty = $("#faculty");
+        var laudeValue = $("#laudeValue");
+        var cfu = $("#cfu");
+
+        data.name ? name.addClass("is-invalid") : name.removeClass("is-invalid");
+        data.surname ? surname.addClass("is-invalid") : surname.removeClass("is-invalid");
+        data.email ? email.addClass("is-invalid") : email.removeClass("is-invalid");
+        data.password ? password.addClass("is-invalid") : password.removeClass("is-invalid");
+        data.university ? university.addClass("is-invalid") : university.removeClass("is-invalid");
+        data.faculty ? faculty.addClass("is-invalid") : faculty.removeClass("is-invalid");
+        data.laude_value ? laudeValue.addClass("is-invalid") : laudeValue.removeClass("is-invalid");
+        data.total_credits ? cfu.addClass("is-invalid") : cfu.removeClass("is-invalid");
+    }
+
+    function editUser(){
+        $.ajax({
+            url: "../php/user.php",
+            type: "POST",
+            data: {
+                action: "editUser",
+                name: $("#name").val(),
+                surname: $("#surname").val(),
+                email: $("#email").val(),
+                university: $("#university").val(),
+                faculty: $("#faculty").val(),
+                laude_value: $("#laudeValue").val(),
+                total_credits: $("#cfu").val(),
+                password: $("#password").val(),
+                passwordConfirmation: $("#passwordConfirmation").val()
+            },
+            success: function(data) {
+                var json = JSON.parse(data);
+                if(json.success){
+                    window.location.href = "index.php";
+                }else{
+                    validation(json);
+                }
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        getUniversities();
+    });
+
+    $("#editUser").click(function(){
+        editUser();
+    });
+
+</script>
