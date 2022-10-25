@@ -21,17 +21,8 @@
                     <th scope="col">Aula</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>Programmazione Web</td>
-                    <td>09:00 - 11:00</td>
-                    <td>Lab. T-3</td>
-                  </tr>
-                  <tr>
-                    <td>Sicurezza dei Sistemi</td>
-                    <td>11:00 - 13:00</td>
-                    <td>Lab. A-T-1</td>
-                  </tr>
+                <tbody id="todaysClassesTable">
+
                 </tbody>
               </table>
             </div>
@@ -146,7 +137,7 @@
   //Questa funzione recupera tutte le tasse relative all'utente loggato, identificato tramite l'id salvato in sessione
   function getTaxes(){
     $.ajax({
-      url: "./php/taxes.php",
+      url: "../php/taxes.php",
       type: "POST",
       data: {
         action: "getTaxes"
@@ -235,16 +226,16 @@
         datasets: [{
           data: data,
           backgroundColor: [
-            'rgba(251,248,204, 0.7)',
-            'rgba(253,228,207, 0.7)',
-            'rgba(255,207,210, 0.7)',
-            'rgba(241,192,232, 0.7)',
-            'rgba(207,186,240, 0.7)',
-            'rgba(163,196,243, 0.7)',
-            'rgba(144,219,244, 0.7)',
-            'rgba(142,236,245, 0.7)',
-            'rgba(152,245,225, 0.7)',
-            'rgba(185,251,192, 0.7)',
+            'rgba(251,248,204, 0.5)',
+            'rgba(253,228,207, 0.5)',
+            'rgba(255,207,210, 0.5)',
+            'rgba(241,192,232, 0.5)',
+            'rgba(207,186,240, 0.5)',
+            'rgba(163,196,243, 0.5)',
+            'rgba(144,219,244, 0.5)',
+            'rgba(142,236,245, 0.5)',
+            'rgba(152,245,225, 0.5)',
+            'rgba(185,251,192, 0.5)',
           ],
           borderColor: [
             'rgba(251,248,204, 1)',
@@ -276,7 +267,7 @@
 
     //Vengono richiesti i cfu dell'utente
     $.ajax({
-      url: "php/stats.php",
+      url: "../php/stats.php",
       type: "POST",
       data: {
         action: "cfu"
@@ -296,7 +287,7 @@
 
     //Vengono richiesti i voti dell'utente in modo da poter calcolare le medie nel tempo e la distribuzione dei voti
     $.ajax({
-      url: "php/stats.php",
+      url: "../php/stats.php",
       type: "POST",
       data: {
         action: "averages"
@@ -376,10 +367,40 @@
   }
 
 
+
+  function getTodaysClasses(){
+    $.ajax({
+      url: "../php/classes.php",
+      type: "POST",
+      data: {
+        action: "getClasses"
+      },
+      success: function(data) {
+        const dayOfWeekName = new Date().toLocaleString(
+          'default', {weekday: 'long'}
+        );
+        var json = JSON.parse(data);
+        var html = "";
+        for(var i = 0; i < json.length; i++){
+          console.log(json[i])
+          if(json[i].day === dayOfWeekName){
+            html += "<tr><td>"+ json[i].name +"</td>";
+            html += "<td>"+ json[i].timeStart +" - " + json[i].timeEnd  + "</td>";
+            html += "<td>"+ json[i].place +"</td></tr>";
+          }
+        }
+        console.log(html)
+        $("#todaysClassesTable").empty();
+        $("#todaysClassesTable").append(html);
+      }
+    })
+  }
+
   //Quando il documento viene caricato vengono eseguite le funzioni che recuperano le tasse e le statistiche
   $("document").ready(function () {
     getTaxes();
     getStats();
+    getTodaysClasses();
   });
 
 
