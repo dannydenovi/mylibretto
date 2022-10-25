@@ -53,7 +53,7 @@ if (!isset($_SESSION['id'])) {
             <span class="nav-link px-2 link-dark" id="tasse" >Tasse</span>
           </li>
         </ul>
-        <span class="me-3"><?echo $_SESSION["fullname"];?></span>
+        <span class="me-3" id="namePlace"></span>
 
         <div class="dropdown text-end">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -62,7 +62,7 @@ if (!isset($_SESSION['id'])) {
             <!--END USER IMAGE-->
           </a>
           <ul class="dropdown-menu text-small">
-            <li><a class="dropdown-item" href="#">Impostazioni</a></li>
+            <li><span class="dropdown-item" id="impostazioni" >Impostazioni</span></li>
             <li><button role="button" id="logout-button" class="dropdown-item text-danger">Logout</button></li>
           </ul>
         </div>
@@ -87,7 +87,7 @@ if (!isset($_SESSION['id'])) {
 </body>
 <script>
   //Array di pagine
-  var elements = [$("#dashboard"), $("#libretto"), $("#tasse"), $("#orarioLezioni")];
+  var elements = [$("#dashboard"), $("#libretto"), $("#tasse"), $("#orarioLezioni"), $("#impostazioni")];
 
   //Al click su uno degli elementi presenti nella topbar
   //Viene caricata la pagina corrispondente e viene aggiunta la classe active
@@ -115,6 +115,12 @@ if (!isset($_SESSION['id'])) {
     $("#main").load("dist/html/orariolezioni.html");
   });
 
+  $("#impostazioni").click(function() {
+    $("#main").empty();
+    selectedItemMenu($("#impostazioni"));
+    $("#main").load("dist/html/impostazioni.html");
+  });
+
 
   //Funzione che aggiunge la classe active all'elemento selezionato
   //e rimuove la classe active agli altri elementi
@@ -127,11 +133,28 @@ if (!isset($_SESSION['id'])) {
     activeElement.addClass("link-secondary");
     activeElement.removeClass("link-dark");
   }
+  
+  //Acqiuisizione dei dati dell'utente
+  function getNameSurname(){
+    $.ajax({
+      url: "./php/user.php",
+      type: "POST",
+      data: {
+        action: "getInfo"
+      },
+      success: function(data){
+        var json = JSON.parse(data);
+        $("#namePlace").text(json.name + " " + json.surname);
+      }
+    });
+  }
 
   //Al caricamento del documento viene caricata la pagina dashboard.html
   $("document").ready(function() {
     $("#main").load("dist/html/dashboard.html");
+    getNameSurname()
   });
+
 
   //Al click sul logout viene eseguito il logout
   //Viene effettuata una chiamata ajax per distruggere la sessione
