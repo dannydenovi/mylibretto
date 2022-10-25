@@ -1,0 +1,400 @@
+<div class="row">
+    <div class="col-12">
+        <!--BEGIN TITLE-->
+        <h1>Orario Lezioni</h1>
+        <!--END TITLE-->
+        <div class="row">
+            <div>
+                <button type="button" class="btn btn-primary" id="addClassBtn">
+                    <i class="bi bi-plus"></i>Aggiungi Lezione
+                </button>
+            </div>
+        </div>
+        <br>
+        <h3>Lunedì</h3>
+        <div class="row">
+            <div class="span12 table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Materia</th>
+                            <th scope="col">Docente</th>
+                            <th scope="col">Orario</th>
+                            <th scope="col">Aula</th>
+                            <th scope="col">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mondayTable">
+
+                    </tbody>
+                </table>
+        <h3>Martedì</h3>
+        <div class="row">
+            <div class="span12 table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Materia</th>
+                            <th scope="col">Docente</th>
+                            <th scope="col">Orario</th>
+                            <th scope="col">Aula</th>
+                            <th scope="col">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tuesdayTable">
+
+                    </tbody>
+                </table>
+        <h3>Mercoledì</h3>
+        <div class="row">
+            <div class="span12 table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Materia</th>
+                            <th scope="col">Docente</th>
+                            <th scope="col">Orario</th>
+                            <th scope="col">Aula</th>
+                            <th scope="col">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="wednesdayTable">
+
+                    </tbody>
+                </table>
+        <h3>Giovedì</h3>
+        <div class="row">
+            <div class="span12 table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Materia</th>
+                            <th scope="col">Docente</th>
+                            <th scope="col">Orario</th>
+                            <th scope="col">Aula</th>
+                            <th scope="col">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="thursdayTable">
+
+                    </tbody>
+                </table>
+        <h3>Venerdì</h3>
+        <div class="row">
+            <div class="span12 table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Materia</th>
+                            <th scope="col">Docente</th>
+                            <th scope="col">Orario</th>
+                            <th scope="col">Aula</th>
+                            <th scope="col">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fridayTable">
+
+                    </tbody>
+                </table>
+        <h3>Sabato</h3>
+        <div class="row">
+            <div class="span12 table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Materia</th>
+                            <th scope="col">Docente</th>
+                            <th scope="col">Orario</th>
+                            <th scope="col">Aula</th>
+                            <th scope="col">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="saturdayTable">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addClassModal" tabindex="-1" aria-labelledby="addClassModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addClassModalLabel">Aggiungi Materia</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="subject" class="form-label">Nome Materia</label>
+                    <input type="text" class="form-control" id="subject" placeholder="Nome Materia">
+                </div>
+                <div class="mb-3">
+                    <label for="professor" class="form-label">Docente</label>
+                    <input type="text" class="form-control" id="professor" placeholder="Docente">
+                </div>
+                <div class="mb-3">
+                    <label for="weekday" class="form-label">Giorno</label>
+                    <select class="form-control form-select" id="weekday" placeholder="Orario">
+                        <option selected disabled value="-1">Seleziona un giorno</option>
+                        <option value="Monday">Lunedì</option>
+                        <option value="Tuesday">Martedì</option>
+                        <option value="Wednesday">Mercoledì</option>
+                        <option value="Thursday">Giovedì</option>
+                        <option value="Friday">Venerdì</option>
+                        <option value="Saturday">Sabato</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="time-start" class="form-label">Orario di inizio</label>
+                    <input type="time" class="form-control" id="time-start" placeholder="Docente">
+                </div>
+                <div class="mb-3">
+                    <label for="time-end" class="form-label">Orario di fine</label>
+                    <input type="time" class="form-control" id="time-end" placeholder="Docente">
+                </div>
+                <div class="mb-3">
+                    <label for="place" class="form-label">Aula</label>
+                    <input type="text" class="form-control" id="place" placeholder="Aula">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" id="addClass">Aggiungi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var subject = $("#subject");
+    var professor = $("#professor");
+    var weekday = $("#weekday");
+    var timeStart = $("#time-start");
+    var timeEnd = $("#time-end");
+    var place = $("#place");
+    var ADD_CLASS = 0;
+    var EDIT_CLASS = 1;
+    var addClassModalLabel = $("#addClassModalLabel");
+    var addClassModal = $("#addClassModal");
+    var addClassButton = $("#addClass");
+    var editClassId = 0;
+
+
+    $(document).ready(function() {
+        $("#addClassBtn").click(function() {
+            newModalInstance(ADD_CLASS, {});
+        });
+        getClasses()
+    });
+
+    //Questa funzione si occupa di generare il modal corretto
+    function newModalInstance(mode, data) {
+        switch (mode) {
+            case 0:
+                //Nel caso di aggiunta di una lezione
+                addClassModalLabel.text("Aggiungi Lezione")
+                addClassButton.text("Aggiungi")
+                break;
+            case 1:
+                //Nel caso della modifica di una lezione
+                addClassModalLabel.text("Modifica Lezione")
+                addClassButton.text("Modifica")
+                break;
+        }
+
+        //Vengono rimosse le classi "is-invalid" in modo tale da non mostrare errori all'apertura del modal
+        subject.removeClass("is-invalid");
+        professor.removeClass("is-invalid");
+        weekday.removeClass("is-invalid");
+        timeStart.removeClass("is-invalid");
+        timeEnd.removeClass("is-invalid");
+        place.removeClass("is-invalid");
+
+        //Vengono posti i campi vuoti o con i dati della lezione selezionata
+        subject.val("" || data.name);
+        professor.val("" || data.professor);
+        weekday.val("-1" || data.day);
+        timeStart.val("" || data.timeStart);
+        timeEnd.val("" || data.timeEnd);
+        place.val("" || data.place);
+
+        //Viene mostrato il modal
+        addClassModal.modal("show");
+    }
+
+
+
+    function validation(data) {
+        console.log(data)
+        data.subject ? subject.addClass("is-invalid") : subject.removeClass("is-invalid")
+        data.professor ? professor.addClass("is-invalid") : professor.removeClass("is-invalid")
+        data.weekday ? weekday.addClass("is-invalid") : weekday.removeClass("is-invalid")
+        data.timeStart ? timeStart.addClass("is-invalid") : timeStart.removeClass("is-invalid")
+        data.timeEnd ? timeEnd.addClass("is-invalid") : timeEnd.removeClass("is-invalid")
+        data.place ? place.addClass("is-invalid") : place.removeClass("is-invalid")
+    }
+
+
+    function getClasses(){
+        $.ajax({
+            url: "../php/classes.php",
+            type: "POST",
+            data: {
+                action: "getClasses"
+            },
+            success: function(data){
+                var json = JSON.parse(data);
+                var mondayHtml = "";
+                var tuesdayHtml = "";
+                var wednesdayHtml = "";
+                var thursdayHtml = "";
+                var fridayHtml = "";
+                var saturdayHtml = "";
+
+                for(var i = 0; i < json.length; i++){
+                    var subject = json[i].name;
+                    var professor = json[i].professor;
+                    var weekday = json[i].day;
+                    var timeStart = json[i].timeStart;
+                    var timeEnd = json[i].timeEnd;
+                    var place = json[i].place;
+                    var id = json[i].class_id;
+
+                    var html = "<tr id="+ id +"><td>" + subject + "</td><td>" + professor + "</td><td>" + timeStart + " - " + timeEnd + "</td><td>" + place + "</td><td><button class='btn btn-warning m-2' onclick='editClass(" + id + ")'><i class='bi bi-pen'></i></button><button class='btn btn-danger m-2' onclick='deleteClass(" + id + ")'><i class='bi bi-trash'></i></button></td></tr>";
+
+                    if(weekday == "Monday"){
+                        mondayHtml += html;
+                    } else if(weekday == "Tuesday"){
+                        tuesdayHtml += html;
+                    } else if(weekday == "Wednesday"){
+                        wednesdayHtml += html;
+                    } else if(weekday == "Thursday"){
+                        thursdayHtml += html;
+                    } else if(weekday == "Friday"){
+                        fridayHtml += html;
+                    } else if(weekday == "Saturday"){
+                        saturdayHtml += html;
+                    }
+
+                    $("#mondayTable").empty().append(mondayHtml);
+                    $("#tuesdayTable").empty().append(tuesdayHtml);
+                    $("#wednesdayTable").empty().append(wednesdayHtml);
+                    $("#thursdayTable").empty().append(thursdayHtml);
+                    $("#fridayTable").empty().append(fridayHtml);
+                    $("#saturdayTable").empty().append(saturdayHtml);
+                }
+            }
+        })
+    }
+
+    function setClass(){
+        $.ajax({
+            url: "../php/classes.php",
+            type: "POST",
+            data: {
+                action: "setClass",
+                name: subject.val(),
+                professor: professor.val(),
+                day: weekday.val(),
+                timeStart: timeStart.val(),
+                timeEnd: timeEnd.val(),
+                place: place.val()
+            },
+            success: function(data){
+                console.log("dati"+data);
+                var json = JSON.parse(data);
+                if(json.success){
+                    $("#addClassModal").modal("hide");
+                    getClasses();
+                } else {
+                    validation(json)
+                }
+            }
+        })
+    }
+
+
+    function deleteClass(id){
+        var tr = $("#" + id).closest('tr');
+        $.ajax({
+            url: "../php/classes.php",
+            type: "POST",
+            data: {
+                action: "deleteClass",
+                id: id
+            },
+            success: function(data){
+                var json = JSON.parse(data);
+                console.log(json);
+                if(!json.error){
+                    tr.fadeOut(1000, function () {
+                        getClasses();
+                    });
+                }
+            }
+        })
+    }
+
+    function editClass(id){
+        $.ajax({
+            url: "../php/classes.php",
+            type: "POST",
+            data: {
+                action: "getClass",
+                id: id
+            },
+            success: function(data){
+                var json = JSON.parse(data);
+                console.log(json);
+                if(!json.error){
+                    editClassId = id;
+                    newModalInstance(EDIT_CLASS, json);
+                }
+            }
+        })
+    }
+
+    function editSingleClass(){
+        $.ajax({
+            url: "../php/classes.php",
+            type: "POST",
+            data: {
+                action: "editClass",
+                id: editClassId,
+                name: subject.val(),
+                professor: professor.val(),
+                day: weekday.val(),
+                timeStart: timeStart.val(),
+                timeEnd: timeEnd.val(),
+                place: place.val()
+            },
+            success: function(data){
+                var json = JSON.parse(data);
+                console.log(json);
+                if(!json.error){
+                    $("#addClassModal").modal("hide");
+                    getClasses();
+                } else {
+                    validation(json)
+                }
+            }
+        })
+    }
+
+
+    //Il tasto svolgerà una determinata azione in base al suo testo, se è "Aggiungi" verrà aggiunta una nuova lezione, se è "Modifica" verrà modificata una lezione
+    $("#addClass").click(function () {
+        if(addClassButton.text() == "Aggiungi")
+            setClass();
+        else
+            editSingleClass();
+    });
+
+</script>
