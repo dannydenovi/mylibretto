@@ -133,6 +133,8 @@
         var date_new = new Date(date);
         return new Intl.DateTimeFormat('it-IT').format(date_new);
   }
+
+  //Viene recuperata l'università e il corso di studi per poi mostrarlo sulla Dashboard
   function getUniversity(){
     $.ajax({
       url: "./php/user.php",
@@ -168,7 +170,9 @@
           //Viene effettuato un parsing a Float in quanto sul database per comodità sono salvati come stringhe
           for(var i = 0; i < json.taxes.length; i++){
             total += parseFloat(json.taxes[i].amount);
-            paid += parseFloat(json.taxes[i].paid);
+            if(json.taxes[i].paid == 1){
+              paid += parseFloat(json.taxes[i].amount);
+            }
           }
           percentage = (parseFloat(paid) * 100) / parseFloat(total);
           percentage = percentage.toFixed(2);

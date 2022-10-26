@@ -18,7 +18,7 @@ if($_POST["action"] === "setTax"){
         $error["tax_date"] = "Inserisci la data dell'imposta";
     if(!$amount || !is_numeric($amount) || $amount < 0)
         $error["tax_amount"] = "Inserisci l'importo dell'imposta";
-    if(!$paid || !is_numeric($paid) || $paid < 0 || $paid > $amount)
+    if($paid != "0" && $paid != "1")
         $error["tax_paid"] = "Inserisci l'importo pagato";
     
     if(count($error) > 0){
@@ -78,7 +78,7 @@ else if($_POST["action"] === "editTax"){
         $error["tax_date"] = "Inserisci la data dell'imposta";
     if(!$amount || !is_numeric($amount) || $amount < 0)
         $error["tax_amount"] = "Inserisci l'importo dell'imposta";
-    if(!$paid || !is_numeric($paid) || $paid < 0 || $paid > $amount)
+    if($paid != "0" && $paid != "1")
         $error["tax_paid"] = "Inserisci l'importo pagato";
 
     if(count($error) > 0){

@@ -20,7 +20,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Nome Tassa</th>
-                            <th scope="col">Saldato</th>
+                            <th scope="col">Pagato</th>
                             <th scope="col">Totale</th>
                             <th scope="col">Data</th>
                             <th scope="col">Azioni</th>
@@ -58,9 +58,9 @@
                     <input type="number" class="form-control" id="tax_amount" placeholder="Totale Tassa" min="1"
                         step="any">
                 </div>
-                <div class="mb-3">
-                    <label for="tax_paid" class="form-label">Pagato</label>
-                    <input type="number" class="form-control" id="tax_paid" placeholder="Pagato" min="0" step="any">
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="tax_paid" value="false">
+                    <label class="form-check-label" for="tax_paid">Pagata</label>
                 </div>
             </div>
             <div class="modal-footer">
@@ -85,6 +85,15 @@
     var ADD_TAX = 0;
     var EDIT_TAX = 1;
     var taxId = 0;
+
+
+    taxPaid.change(function(){
+     if(taxPaid.prop('checked')){
+        taxPaid.val('1');
+     }else{
+        taxPaid.val('0');
+     }  
+    });
 
     //Viene definita la funzione per aggiungere una tassa
     $("#addTaxModalButton").click(function () {
@@ -128,7 +137,8 @@
         taxName.val("" || data.name);
         taxDate.val("" || data.date);
         taxAmount.val("" || data.amount);
-        taxPaid.val("" || data.paid);
+        taxPaid.val("" || (data.paid === "1" ? "1" : "0"));
+        taxPaid.val() === "1" ? taxPaid.prop('checked', true) : taxPaid.prop('checked', false);
 
         //Viene mostrato il modal
         addTaxModal.modal("show");
@@ -159,16 +169,19 @@
                 var json = JSON.parse(data);
                 var html = ""
                 for (var i = 0; i < json.taxes.length; i++) {
+                    var paid = json.taxes[i].paid == 1 ? "Si" : "No";
                     html += "<tr id=" + json.taxes[i].tax_id + ">";
                     html += "<td>" + json.taxes[i].name + "</td>";
-                    html += "<td>" + parseFloat(json.taxes[i].paid).toFixed(2) + "€</td>";
+                    html += "<td>" + paid + "</td>";
                     html += "<td>" + parseFloat(json.taxes[i].amount).toFixed(2) + "€</td>";
                     html += "<td>" + convertDate(json.taxes[i].date) + "</td>";
                     html += "<td>";
                     html += "<button type='button' class='btn btn-warning m-2' onclick='editTax(" + json.taxes[i].tax_id + ")'><i class='bi bi-pen' ></i></button>";
                     html += "<button type='button' class='btn btn-danger m-2' onclick='deleteTax(" + json.taxes[i].tax_id + ")'><i class='bi bi-trash'></i></button></td>";
                     html += "</tr>";
-                    toPay += parseFloat(json.taxes[i].amount) - parseFloat(json.taxes[i].paid);
+                    if(json.taxes[i].paid == 0){
+                        toPay += parseFloat(json.taxes[i].amount);
+                    }           
                 }
                 taxTable.empty();
                 taxTable.append(html);
@@ -195,7 +208,6 @@
             },
             success: function (data) {
                 var json = JSON.parse(data);
-
                 if (json.success) {
                     //Nel caso in cui la richiesta vada a buon fine viene chiuso il modal e viene ricaricata la tabella
                     getTaxes();
@@ -248,7 +260,6 @@
             cache: false,
             success: function (result) {
                 var json = JSON.parse(result);
-                console.log(json);
                 if (json.error)
                     console.log(result);
                 else {
