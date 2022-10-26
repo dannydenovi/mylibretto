@@ -53,13 +53,12 @@ if (!isset($_SESSION['id'])) {
             <span class="nav-link px-2 link-dark" id="tasse" >Tasse</span>
           </li>
         </ul>
-        <span class="me-3" id="namePlace"></span>
 
         <div class="dropdown text-end">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <!--BEGIN USER IMAGE-->
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" alt="mdo" class="rounded-circle user-image" />
-            <!--END USER IMAGE-->
+            <!--BEGIN USER NAME-->
+            <span class="text-dark" id="namePlace"></span>
+            <!--END USER NAME-->
           </a>
           <ul class="dropdown-menu text-small">
             <li><span class="dropdown-item" id="impostazioni" >Impostazioni</span></li>
