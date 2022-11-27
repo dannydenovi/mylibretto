@@ -110,64 +110,64 @@ function validate(json) {
     //Vengono controllati i campi del json
     //Nel caso in cui dovesse trovare un riferimento allo specifico elemento vuol dire che il server ha restituito un errore sull'elemento in questione
     //Viene aggiunta la classe "is-invalid" che evidenzia il campo in rosso
-    if(!json.success) {
-        if(json.name){
+    if (!json.success) {
+        if (json.name) {
             $("#name").addClass("is-invalid");
             $("#name").next().text(json.name);
         } else {
             $("#name").removeClass("is-invalid");
             $("#name").next().text("");
         }
-        if(json.surname){
+        if (json.surname) {
             $("#surname").addClass("is-invalid");
             $("#surname").next().text(json.surname);
         } else {
             $("#surname").removeClass("is-invalid");
             $("#surname").next().text("");
         }
-        if(json.university){
+        if (json.university) {
             $("#university").addClass("is-invalid");
             $("#university").next().text(json.university);
         } else {
             $("#university").removeClass("is-invalid");
             $("#university").next().text("");
         }
-        if(json.faculty){
+        if (json.faculty) {
             $("#faculty").addClass("is-invalid");
             $("#faculty").next().text(json.faculty);
         } else {
             $("#faculty").removeClass("is-invalid");
             $("#faculty").next().text("");
         }
-        if(json.cfu){
+        if (json.cfu) {
             $("#cfu").addClass("is-invalid");
             $("#cfu").next().text(json.cfu);
         } else {
             $("#cfu").removeClass("is-invalid");
             $("#cfu").next().text("");
         }
-        if(json.laude){
+        if (json.laude) {
             $("#laude").addClass("is-invalid");
             $("#laude").next().text(json.laude);
         } else {
             $("#laude").removeClass("is-invalid");
             $("#laude").next().text("");
         }
-        if(json.email){
+        if (json.email) {
             $("#email").addClass("is-invalid");
             $("#email").next().text(json.email);
         } else {
             $("#email").removeClass("is-invalid");
             $("#email").next().text("");
         }
-        if(json.password){
+        if (json.password) {
             $("#password").addClass("is-invalid");
             $("#password").next().text(json.password);
         } else {
             $("#password").removeClass("is-invalid");
             $("#password").next().text("");
         }
-        if(json.passwordConfirmation){
+        if (json.passwordConfirmation) {
             $("#password-confirmation").addClass("is-invalid")
             $("#password-confirmation").next().text(json.passwordConfirmation);
         } else {
