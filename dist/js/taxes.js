@@ -87,10 +87,7 @@ function getTaxes() {
 
     $.ajax({
         url: "../php/taxes.php",
-        type: "POST",
-        data: {
-            action: "getTaxes"
-        },
+        type: "GET",
         success: function (data) {
             var json = JSON.parse(data);
             var html = ""
@@ -102,7 +99,7 @@ function getTaxes() {
                 html += "<td>" + parseFloat(json.taxes[i].amount).toFixed(2) + "€</td>";
                 html += "<td>" + convertDate(json.taxes[i].date) + "</td>";
                 html += "<td>";
-                html += "<button type='button' class='btn btn-warning m-2' onclick='editTax(" + json.taxes[i].tax_id + ")'><i class='bi bi-pen' ></i></button>";
+                html += "<button type='button' class='btn btn-warning m-2' onclick='getTax(" + json.taxes[i].tax_id + ")'><i class='bi bi-pen' ></i></button>";
                 html += "<button type='button' class='btn btn-danger m-2' onclick='deleteTax(" + json.taxes[i].tax_id + ")'><i class='bi bi-trash'></i></button></td>";
                 html += "</tr>";
                 if (json.taxes[i].paid == 0) {
@@ -111,11 +108,35 @@ function getTaxes() {
             }
             taxTable.empty();
             taxTable.append(html);
+
             //Viene aggiunto il testo per il totale da pagare
             $("#toPay").text(toPay.toFixed(2) + "€");
         },
         error: function (data) {
             console.log("Problema con la richiesta");
+        }
+    });
+}
+
+//Questa funzione si occupa di recuperare i dati di una tassa in base all'id
+function getTax(id) {
+    $.ajax({
+        method: 'GET',
+        url: "../php/taxes.php",
+        data: {
+            id: id
+        },
+        cache: false,
+        success: function (result) {
+            var json = JSON.parse(result);
+            if (json.error)
+                console.log(result);
+            else {
+                //Nel caso in cui non ci fossero errori viene mostrato il modal con i dati della tassa
+                //e viene impostato l'id della tassa
+                taxId = id;
+                newModalInstance(EDIT_TAX, json.taxes[0]);;
+            }
         }
     });
 }
@@ -126,7 +147,6 @@ function setTax() {
         url: "../php/taxes.php",
         type: "POST",
         data: {
-            action: "setTax",
             tax_name: taxName.val(),
             tax_date: taxDate.val(),
             tax_amount: taxAmount.val(),
@@ -148,64 +168,13 @@ function setTax() {
     });
 }
 
-//Questa funzione si occupa di eliminare una tassa in base all'id
-function deleteTax(id) {
-    //Viene identificata la riga da eliminare
-    var tr = $("#" + id).closest('tr');
-    $.ajax({
-        method: 'POST',
-        url: "../php/taxes.php",
-        data: {
-            action: "deleteTax",
-            id: id
-        },
-        cache: false,
-        success: function (result) {
-            var json = JSON.parse(result);
-            if (json.error)
-                console.log(result);
-            else {
-                //Nel caso in cui non ci fossero errori viene eliminata la riga
-                tr.fadeOut(1000, function () {
-                    getTaxes();
-                });
-            }
-        }
-    });
-};
-
-//Questa funzione si occupa di recuperare i dati di una tassa in base all'id
-function editTax(id) {
-    $.ajax({
-        method: 'POST',
-        url: "../php/taxes.php",
-        data: {
-            action: "getTax",
-            id: id
-        },
-        cache: false,
-        success: function (result) {
-            var json = JSON.parse(result);
-            if (json.error)
-                console.log(result);
-            else {
-                //Nel caso in cui non ci fossero errori viene mostrato il modal con i dati della tassa
-                //e viene impostato l'id della tassa
-                taxId = id;
-                newModalInstance(EDIT_TAX, json);;
-            }
-        }
-    });
-}
-
 
 //Questa funzione si occupa di aggiornare una tassa
-function editSingleTax() {
+function editTax() {
     $.ajax({
-        method: 'POST',
+        method: 'PUT',
         url: "../php/taxes.php",
         data: {
-            action: "editTax",
             id: taxId,
             tax_name: taxName.val(),
             tax_date: taxDate.val(),
@@ -226,10 +195,39 @@ function editSingleTax() {
     });
 }
 
+
+//Questa funzione si occupa di eliminare una tassa in base all'id
+function deleteTax(id) {
+    //Viene identificata la riga da eliminare
+    var tr = $("#" + id).closest('tr');
+    $.ajax({
+        method: 'DELETE',
+        url: "../php/taxes.php",
+        data: {
+            id: id
+        },
+        cache: false,
+        success: function (result) {
+            var json = JSON.parse(result);
+            if (json.error)
+                console.log(result);
+            else {
+                //Nel caso in cui non ci fossero errori viene eliminata la riga
+                tr.fadeOut(1000, function () {
+                    getTaxes();
+                });
+            }
+        }
+    });
+};
+
+
+
+
 //Il tasto svolgerà una determinata azione in base al suo testo, se è "Aggiungi" verrà aggiunta una nuova tassa, se è "Modifica" verrà modificata una tassa
 $("#addTax").click(function () {
     if (addTaxButton.text() == "Aggiungi")
         setTax();
     else
-        editSingleTax();
+        editTax();
 });

@@ -21,10 +21,7 @@ function getUniversity() {
 function getTaxes() {
     $.ajax({
         url: "../php/taxes.php",
-        type: "POST",
-        data: {
-            action: "getTaxes"
-        },
+        type: "GET",
         success: function (data) {
             var json = JSON.parse(data);
             var url = ""
@@ -153,7 +150,7 @@ function getStats() {
     //Vengono richiesti i cfu dell'utente
     $.ajax({
         url: "../php/stats.php",
-        type: "POST",
+        type: "GET",
         data: {
             action: "cfu"
         },
@@ -173,7 +170,7 @@ function getStats() {
     //Vengono richiesti i voti dell'utente in modo da poter calcolare le medie nel tempo e la distribuzione dei voti
     $.ajax({
         url: "../php/stats.php",
-        type: "POST",
+        type: "GET",
         data: {
             action: "averages"
         },

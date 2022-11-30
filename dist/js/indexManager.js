@@ -6,7 +6,7 @@ var elements = [$("#dashboard"), $("#libretto"), $("#tasse"), $("#orarioLezioni"
 $("#libretto").click(function () {
     $("#main").empty();
     selectedItemMenu($("#libretto"));
-    $("#main").load("dist/html/libretto.html");
+    $("#main").load("dist/html/transcript.html");
 });
 
 $("#dashboard").click(function () {
@@ -18,7 +18,7 @@ $("#dashboard").click(function () {
 $("#tasse").click(function () {
     $("#main").empty();
     selectedItemMenu($("#tasse"));
-    $("#main").load("dist/html/tasse.html");
+    $("#main").load("dist/html/taxes.html");
 });
 
 $("#orarioLezioni").click(function () {
@@ -30,7 +30,7 @@ $("#orarioLezioni").click(function () {
 $("#impostazioni").click(function () {
     $("#main").empty();
     selectedItemMenu($("#impostazioni"));
-    $("#main").load("dist/html/impostazioni.html");
+    $("#main").load("dist/html/settings.html");
 });
 
 

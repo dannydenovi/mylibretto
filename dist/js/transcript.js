@@ -21,7 +21,7 @@ $(document).ready(function () {
         if (addModalButton.text() === "Aggiungi") {
             addExam();
         } else if (addModalButton.text() === "Modifica") {
-            editSingleExam();
+            editExam();
         }
     });
     $("#addSubjButton").click(function () {
@@ -37,6 +37,18 @@ function convertDate(date) {
     var date_new = new Date(date);
     return new Intl.DateTimeFormat('it-IT').format(date_new);
 }
+
+
+//Questa funzione si occupa della validazione, nel caso in cui dovesse trovare il messaggio di errore
+//Relativo all'elemento allora inserisce la classe "is-invalid"
+function validateExam(data) {
+    data.subject ? subject.addClass("is-invalid") : subject.removeClass("is-invalid");
+    data.cfu ? cfu.addClass("is-invalid") : cfu.removeClass("is-invalid");
+    data.professor ? professor.addClass("is-invalid") : professor.removeClass("is-invalid");
+    data.exam_date ? exam_date.addClass("is-invalid") : exam_date.removeClass("is-invalid");
+    data.mark ? mark.addClass("is-invalid") : mark.removeClass("is-invalid");
+}
+
 
 //Questa funzione si occupa di generare il modal corretto in base al tasto che lo apre
 function newModalInstance(mode, data) {
@@ -73,33 +85,11 @@ function newModalInstance(mode, data) {
 }
 
 
-// Questa funzione recupera i dati relativi ad un singolo esame tramite l'id
-function editExam(id) {
-    $.ajax({
-        url: "../php/exams.php",
-        type: "POST",
-        data: {
-            "id": id,
-            "action": "getSingleExam"
-        },
-        success: function (data) {
-            var json = JSON.parse(data);
-            newModalInstance(EDIT_SUBJECT, json)
-        }
-    });
-    //Viene posto come id di modifica quello corrente
-    editSubjectID = id;
-}
-
-
 // Vengono recuperati tutti gli esami e mostrati in tabella
 function getExams() {
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: "../php/exams.php",
-        data: {
-            action: "getExams"
-        },
         cache: false,
         success: function (data) {
             var json = JSON.parse(data);
@@ -120,7 +110,7 @@ function getExams() {
                     html += "<td>" + exams[i].cfu + "</td>";
                     html += "<td>" + (exams[i].mark > 30 ? "30 e lode" : exams[i].mark) + "</td>";
                     html += "<td>";
-                    html += "<button type='button' class='btn btn-warning m-2' onclick='editExam(" + exams[i].id + ")'><i class='bi bi-pen' ></i></button>";
+                    html += "<button type='button' class='btn btn-warning m-2' onclick='getExam(" + exams[i].id + ")'><i class='bi bi-pen' ></i></button>";
                     html += "<button type='button' class='btn btn-danger m-2' onclick='deleteExam(" + exams[i].id + ")'><i class='bi bi-trash'></i></button></td>";
                     html += "</tr>";
                     average += parseInt(exams[i].mark);
@@ -143,46 +133,29 @@ function getExams() {
     });
 }
 
-// Elimina un esame tramite l'id
-function deleteExam(id) {
-    //Viene identificato l'elemento tabellare da eliminare più vicino all'elemento con quello specifico id
-    var tr = $("#" + id).closest('tr');
+
+// Questa funzione recupera i dati relativi ad un singolo esame tramite l'id
+function getExam(id) {
     $.ajax({
-        method: 'POST',
         url: "../php/exams.php",
+        type: "GET",
         data: {
-            action: "deleteExam",
-            id: id
+            "id": id,
         },
-        cache: false,
-        success: function (result) {
-            var json = JSON.parse(result);
-            if (json.error)
-                console.log(result);
-            else {
-                //Nel caso in cui non vi siano errori viene fatto un fadeout dell'elemento e aggiornata la lista
-                tr.fadeOut(1000, function () {
-                    getExams();
-                });
-            }
+        success: function (data) {
+            var json = JSON.parse(data);
+            console.log(json);
+            newModalInstance(EDIT_SUBJECT, json.exams[0]);
         }
     });
-};
-
-//Questa funzione si occupa della validazione, nel caso in cui dovesse trovare il messaggio di errore
-//Relativo all'elemento allora inserisce la classe "is-invalid"
-function validateExam(data) {
-    data.subject ? subject.addClass("is-invalid") : subject.removeClass("is-invalid");
-    data.cfu ? cfu.addClass("is-invalid") : cfu.removeClass("is-invalid");
-    data.professor ? professor.addClass("is-invalid") : professor.removeClass("is-invalid");
-    data.exam_date ? exam_date.addClass("is-invalid") : exam_date.removeClass("is-invalid");
-    data.mark ? mark.addClass("is-invalid") : mark.removeClass("is-invalid");
+    //Viene posto come id di modifica quello corrente
+    editSubjectID = id;
 }
 
 //Questa funzione si occupa di aggiungere un esame e di aggiorna la lista
 function addExam() {
     $.ajax({
-        type: "POST",
+        type: "PUT",
         url: "../php/exams.php",
         data: {
             action: "setExams",
@@ -208,12 +181,11 @@ function addExam() {
 
 //Questa funzione aggiunge un singolo esame e aggiorna la lista
 //Nel caso in cui il backend non dovesse restituire success allora viene effettuata la validazione dei campi in base al json restituito
-function editSingleExam() {
+function editExam() {
     $.ajax({
-        type: "POST",
+        type: "PUT",
         url: "../php/exams.php",
         data: {
-            action: "editExam",
             id: editSubjectID,
             subject: subject.val(),
             cfu: cfu.val(),
@@ -224,7 +196,6 @@ function editSingleExam() {
         cache: false,
         success: function (data) {
             var json = JSON.parse(data);
-            console.log(json);
             if (json.success) {
                 getExams();
                 $('#addSubjectModal').modal('hide');
@@ -234,3 +205,31 @@ function editSingleExam() {
         }
     });
 }
+
+
+// Elimina un esame tramite l'id
+function deleteExam(id) {
+    //Viene identificato l'elemento tabellare da eliminare più vicino all'elemento con quello specifico id
+    var tr = $("#" + id).closest('tr');
+    $.ajax({
+        method: 'DELETE',
+        url: "../php/exams.php",
+        data: {
+            id: id
+        },
+        cache: false,
+        success: function (result) {
+            var json = JSON.parse(result);
+            if (json.error)
+                console.log(result);
+            else {
+                //Nel caso in cui non vi siano errori viene fatto un fadeout dell'elemento e aggiornata la lista
+                tr.fadeOut(1000, function () {
+                    getExams();
+                });
+            }
+        }
+    });
+};
+
+

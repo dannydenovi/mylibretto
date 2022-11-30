@@ -3,7 +3,7 @@
 require_once('config.php');
 session_start();
 
-if ($_POST["action"] === "cfu") {
+if ($_GET["action"] === "cfu") {
     $sql = "SELECT SUM(cfu) AS cfu FROM exams WHERE user_id = " . $_SESSION['id'];
 
     if ($result = $connection->query($sql)) {
@@ -21,7 +21,7 @@ if ($_POST["action"] === "cfu") {
     } else {
         echo json_encode(['error' => 'Errore nel caricamento dei CFU']);
     }
-} else if ($_POST["action"] === "averages") {
+} else if ($_GET["action"] === "averages") {
     $sql = "SELECT cfu, mark, exam_date FROM exams WHERE user_id = " . $_SESSION['id'] ." ORDER BY exam_date ASC";
 
     if ($result = $connection->query($sql)) {
