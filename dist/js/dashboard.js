@@ -9,14 +9,10 @@ function convertDate(date) {
 function getUniversity() {
     $.ajax({
         url: "./php/user.php",
-        type: "POST",
-        data: {
-            action: "getInfo"
-        },
+        type: "GET",
         success: function (data) {
-            var json = JSON.parse(data);
-            $("#university").text(json.university);
-            $("#course").text(json.faculty);
+            $("#university").text(data.university);
+            $("#course").text(data.faculty);
         }
     });
 }
@@ -260,10 +256,7 @@ function getStats() {
 function getTodaysClasses() {
     $.ajax({
         url: "../php/classes.php",
-        type: "POST",
-        data: {
-            action: "getClasses"
-        },
+        type: "GET",
         success: function (data) {
             //Tramite questa variabile recupereremo il giorno corrente
             const dayOfWeekName = new Date().toLocaleString(

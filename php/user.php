@@ -4,8 +4,11 @@
 require_once("config.php");
 session_start();
 
-if($_POST["action"] === "getInfo"){
-    $sql = "SELECT * FROM users JOIN infos on users.id = infos.user_id WHERE id = " . $_SESSION["id"];
+$method = $_SERVER['REQUEST_METHOD'];
+
+
+if($method === "GET"){
+    $sql = "SELECT name, surname, email, user_id, total_credits, laude_value,faculty, university FROM users JOIN infos on users.id = infos.user_id WHERE id = " . $_SESSION["id"];
     if($result = $connection->query($sql)){
         $info = $result->fetch_assoc();
         echo json_encode($info);
@@ -13,16 +16,17 @@ if($_POST["action"] === "getInfo"){
         echo json_encode(['error' => 'Errore nel caricamento delle info']);
     }
 }
-else if($_POST["action"] === "editUser"){
-    $name = $connection->real_escape_string($_POST["name"]);
-    $surname = $connection->real_escape_string($_POST["surname"]);
-    $email = $connection->real_escape_string($_POST["email"]);
-    $password = $connection->real_escape_string($_POST["password"]);
-    $passwordConfirmation = $connection->real_escape_string($_POST["passwordConfirmation"]);
-    $university = $connection->real_escape_string($_POST["university"]);
-    $faculty = $connection->real_escape_string($_POST["faculty"]);
-    $laude_value = $connection->real_escape_string($_POST["laude_value"]);
-    $total_credits = $connection->real_escape_string($_POST["total_credits"]);
+else if($method === "PUT"){
+    parse_str(file_get_contents('php://input'), $_PUT);
+    $name = $connection->real_escape_string($_PUT["name"]);
+    $surname = $connection->real_escape_string($_PUT["surname"]);
+    $email = $connection->real_escape_string($_PUT["email"]);
+    $password = $connection->real_escape_string($_PUT["password"]);
+    $passwordConfirmation = $connection->real_escape_string($_PUT["passwordConfirmation"]);
+    $university = $connection->real_escape_string($_PUT["university"]);
+    $faculty = $connection->real_escape_string($_PUT["faculty"]);
+    $laude_value = $connection->real_escape_string($_PUT["laude_value"]);
+    $total_credits = $connection->real_escape_string($_PUT["total_credits"]);
 
     $error = [];
 
@@ -47,10 +51,10 @@ else if($_POST["action"] === "editUser"){
     if(count($error) > 0){
         echo json_encode($error);
     } else {
+        $sql = "UPDATE users SET name = '$name', surname = '$surname', email = '$email'";
         if($password)
-            $sql = "UPDATE users SET name = '$name', surname = '$surname', email = '$email', password = '$hashedPassword' WHERE id = " . $_SESSION["id"];
-        else
-            $sql = "UPDATE users SET name = '$name', surname = '$surname', email = '$email' WHERE id = " . $_SESSION["id"];
+           $sql .= ", password = '$hashedPassword'";
+        $sql .= " WHERE id = " . $_SESSION["id"];
         if($connection->query($sql)){
             $sql = "UPDATE infos SET university = '$university', faculty = '$faculty', laude_value = '$laude_value', total_credits = '$total_credits' WHERE user_id = " . $_SESSION["id"];
             if($connection->query($sql)){
