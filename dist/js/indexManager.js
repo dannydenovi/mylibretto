@@ -50,10 +50,7 @@ function selectedItemMenu(activeElement) {
 function getNameSurname() {
     $.ajax({
         url: "./php/user.php",
-        type: "POST",
-        data: {
-            action: "getInfo"
-        },
+        type: "GET",
         success: function (data) {
             var json = JSON.parse(data);
             $("#namePlace").text(json.name + " " + json.surname);

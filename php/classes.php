@@ -3,17 +3,19 @@
 require_once("config.php");
 session_start();
 
-if($_POST["action"] === "getClasses"){
-    $sql = "SELECT * FROM classes WHERE user_id = ".$_SESSION["id"];
-    $result = $connection->query($sql);
-    $classes = array();
-    while($row = $result->fetch_assoc()){
-        $classes[] = $row;
-    }
-    echo json_encode($classes);
-}
+$method = $_SERVER['REQUEST_METHOD'];
 
-else if($_POST["action"] === "setClass"){
+
+switch ($method){
+    case "GET":
+        getClass();
+        break;
+
+    }
+
+
+
+if($_POST["action"] === "setClass"){
 
     $name = $connection->real_escape_string($_POST["name"]);
     $professor = $connection->real_escape_string($_POST["professor"]);
@@ -65,12 +67,6 @@ else if($_POST["action"] === "deleteClass"){
         echo json_encode("Errore: ".$connection->error);
     }
 }
-else if($_POST["action"] === "getClass"){
-    $sql = "SELECT * FROM classes WHERE class_id = ".$_POST["id"];
-    $result = $connection->query($sql);
-    $class = $result->fetch_assoc();
-    echo json_encode($class);
-}
 else if($_POST["action"] === "editClass"){
     $id = $connection->real_escape_string($_POST["id"]);
     $name = $connection->real_escape_string($_POST["name"]);
@@ -112,4 +108,20 @@ else if($_POST["action"] === "editClass"){
             echo json_encode("Errore: ".$connection->error);
         }
     }
+}
+
+
+function getClass(){
+    global $connection;
+    $sql = "SELECT * FROM classes WHERE user_id = ".$_SESSION["id"];
+
+    if($_GET["id"])
+        $sql .= " AND class_id = ".$_GET["id"];
+    
+    $result = $connection->query($sql);
+    $classes = array();
+    while($row = $result->fetch_assoc()){
+        $classes[] = $row;
+    }
+    echo json_encode($classes);
 }
