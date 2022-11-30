@@ -1,4 +1,3 @@
-
 //Vengono definiti gli elementi
 var subject = $("#subject");
 var professor = $("#professor");
@@ -45,10 +44,11 @@ function newModalInstance(mode, data) {
     timeEnd.removeClass("is-invalid");
     place.removeClass("is-invalid");
 
+    console.log(data.day)
     //Vengono posti i campi vuoti o con i dati della lezione selezionata
     subject.val("" || data.name);
     professor.val("" || data.professor);
-    weekday.val("-1" || data.day);
+    data.day ? weekday.val(data.day) : weekday.val("-1");
     timeStart.val("" || data.timeStart);
     timeEnd.val("" || data.timeEnd);
     place.val("" || data.place);
@@ -56,7 +56,6 @@ function newModalInstance(mode, data) {
     //Viene mostrato il modal
     addClassModal.modal("show");
 }
-
 
 //Questa funzione controlla se vi sono dei campi relativi alle lezioni nel json
 //In caso di esito positivo viene aggiunta la classe "is-invalid"
@@ -74,10 +73,7 @@ function validation(data) {
 function getClasses() {
     $.ajax({
         url: "../php/classes.php",
-        type: "POST",
-        data: {
-            action: "getClasses"
-        },
+        type: "GET",
         success: function (data) {
             var json = JSON.parse(data);
             var mondayHtml = "";
@@ -97,7 +93,7 @@ function getClasses() {
                 var id = json[i].class_id;
 
                 //Viene creato un elemento html per ogni lezione
-                var html = "<tr id=" + id + "><td>" + subject + "</td><td>" + professor + "</td><td>" + timeStart + " - " + timeEnd + "</td><td>" + place + "</td><td><button class='btn btn-warning m-2' onclick='editClass(" + id + ")'><i class='bi bi-pen'></i></button><button class='btn btn-danger m-2' onclick='deleteClass(" + id + ")'><i class='bi bi-trash'></i></button></td></tr>";
+                var html = "<tr id=" + id + "><td>" + subject + "</td><td>" + professor + "</td><td>" + timeStart + " - " + timeEnd + "</td><td>" + place + "</td><td><button class='btn btn-warning m-2' onclick='getClass(" + id + ")'><i class='bi bi-pen'></i></button><button class='btn btn-danger m-2' onclick='deleteClass(" + id + ")'><i class='bi bi-trash'></i></button></td></tr>";
 
                 //Viene aggiunto l'elemento html nella stringa corrispondente al giorno della settimana
                 if (weekday == "Monday") {
@@ -126,13 +122,31 @@ function getClasses() {
     })
 }
 
+//Questa funzione si occupa di ottenere i dati relativi ad una lezione per poter istanziare il modal
+function getClass(id) {
+    $.ajax({
+        url: "../php/classes.php",
+        type: "GET",
+        data: {
+            id: id
+        },
+        success: function (data) {
+            var json = JSON.parse(data);
+            console.log(json);
+            if (!json.error) {
+                editClassId = id;
+                newModalInstance(EDIT_CLASS, json[0]);
+            }
+        }
+    })
+}
+
 //Questa funzione si occupa di aggiungere una lezione
 function setClass() {
     $.ajax({
         url: "../php/classes.php",
         type: "POST",
         data: {
-            action: "setClass",
             name: subject.val(),
             professor: professor.val(),
             day: weekday.val(),
@@ -155,13 +169,38 @@ function setClass() {
 
 
 //Questa funzione si occupa di modificare una lezione
+function editClass() {
+    $.ajax({
+        url: "../php/classes.php",
+        type: "PUT",
+        data: {
+            id: editClassId,
+            name: subject.val(),
+            professor: professor.val(),
+            day: weekday.val(),
+            timeStart: timeStart.val(),
+            timeEnd: timeEnd.val(),
+            place: place.val()
+        },
+        success: function (data) {
+            var json = JSON.parse(data);
+            if (!json.error) {
+                $("#addClassModal").modal("hide");
+                getClasses();
+            } else {
+                validation(json)
+            }
+        }
+    })
+}
+
+//Questa funzione si occupa di modificare una lezione
 function deleteClass(id) {
     var tr = $("#" + id).closest('tr');
     $.ajax({
         url: "../php/classes.php",
-        type: "POST",
+        type: "DELETE",
         data: {
-            action: "deleteClass",
             id: id
         },
         success: function (data) {
@@ -176,59 +215,10 @@ function deleteClass(id) {
     })
 }
 
-//Questa funzione si occupa di ottenere i dati relativi ad una lezione per poter istanziare il modal
-function editClass(id) {
-    $.ajax({
-        url: "../php/classes.php",
-        type: "POST",
-        data: {
-            action: "getClass",
-            id: id
-        },
-        success: function (data) {
-            var json = JSON.parse(data);
-            console.log(json);
-            if (!json.error) {
-                editClassId = id;
-                newModalInstance(EDIT_CLASS, json);
-            }
-        }
-    })
-}
-
-//Questa funzione si occupa di modificare una lezione
-function editSingleClass() {
-    $.ajax({
-        url: "../php/classes.php",
-        type: "POST",
-        data: {
-            action: "editClass",
-            id: editClassId,
-            name: subject.val(),
-            professor: professor.val(),
-            day: weekday.val(),
-            timeStart: timeStart.val(),
-            timeEnd: timeEnd.val(),
-            place: place.val()
-        },
-        success: function (data) {
-            var json = JSON.parse(data);
-            console.log(json);
-            if (!json.error) {
-                $("#addClassModal").modal("hide");
-                getClasses();
-            } else {
-                validation(json)
-            }
-        }
-    })
-}
-
-
 //Il tasto svolgerà una determinata azione in base al suo testo, se è "Aggiungi" verrà aggiunta una nuova lezione, se è "Modifica" verrà modificata una lezione
 $("#addClass").click(function () {
     if (addClassButton.text() == "Aggiungi")
         setClass();
     else
-        editSingleClass();
+        editClass();
 });

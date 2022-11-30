@@ -24,7 +24,7 @@ $("#tasse").click(function () {
 $("#orarioLezioni").click(function () {
     $("#main").empty();
     selectedItemMenu($("#orarioLezioni"));
-    $("#main").load("dist/html/orariolezioni.html");
+    $("#main").load("dist/html/lectures.html");
 });
 
 $("#impostazioni").click(function () {

@@ -11,12 +11,43 @@ switch ($method){
         getClass();
         break;
 
+    case "POST":
+        addClass();
+        break;
+
+    case "PUT":
+        updateClass();
+        break;
+
+    case "DELETE":
+        deleteClass();
+        break;
+
+    default:
+        echo json_encode(['error' => 'Metodo non valido']);
+        break;
+}
+
+
+
+function getClass(){
+    global $connection;
+    $sql = "SELECT * FROM classes WHERE user_id = ".$_SESSION["id"];
+
+    if($_GET["id"])
+        $sql .= " AND class_id = ".$_GET["id"];
+    
+    $result = $connection->query($sql);
+    $classes = array();
+    while($row = $result->fetch_assoc()){
+        $classes[] = $row;
     }
+    echo json_encode($classes);
+}
 
 
-
-if($_POST["action"] === "setClass"){
-
+function addClass(){
+    global $connection;
     $name = $connection->real_escape_string($_POST["name"]);
     $professor = $connection->real_escape_string($_POST["professor"]);
     $day = $connection->real_escape_string($_POST["day"]);
@@ -57,24 +88,17 @@ if($_POST["action"] === "setClass"){
         }
     }
 }
-else if($_POST["action"] === "deleteClass"){
-    $id = $connection->real_escape_string($_POST["id"]);
-    $sql = "DELETE FROM classes WHERE class_id = $id";
-    $result = $connection->query($sql);
-    if($result){
-        echo json_encode(["success" => "Classe eliminata con successo"]);
-    } else {
-        echo json_encode("Errore: ".$connection->error);
-    }
-}
-else if($_POST["action"] === "editClass"){
-    $id = $connection->real_escape_string($_POST["id"]);
-    $name = $connection->real_escape_string($_POST["name"]);
-    $professor = $connection->real_escape_string($_POST["professor"]);
-    $day = $connection->real_escape_string($_POST["day"]);
-    $timeStart = $connection->real_escape_string($_POST["timeStart"]);
-    $timeEnd = $connection->real_escape_string($_POST["timeEnd"]);
-    $place = $connection->real_escape_string($_POST["place"]);
+
+function updateClass(){
+    global $connection;
+    parse_str(file_get_contents('php://input'), $_PUT);
+    $id = $connection->real_escape_string($_PUT["id"]);
+    $name = $connection->real_escape_string($_PUT["name"]);
+    $professor = $connection->real_escape_string($_PUT["professor"]);
+    $day = $connection->real_escape_string($_PUT["day"]);
+    $timeStart = $connection->real_escape_string($_PUT["timeStart"]);
+    $timeEnd = $connection->real_escape_string($_PUT["timeEnd"]);
+    $place = $connection->real_escape_string($_PUT["place"]);
 
     $error = [];
 
@@ -110,18 +134,18 @@ else if($_POST["action"] === "editClass"){
     }
 }
 
-
-function getClass(){
+function deleteClass(){
     global $connection;
-    $sql = "SELECT * FROM classes WHERE user_id = ".$_SESSION["id"];
-
-    if($_GET["id"])
-        $sql .= " AND class_id = ".$_GET["id"];
-    
+    parse_str(file_get_contents('php://input'), $_DELETE);
+    $id = $connection->real_escape_string($_DELETE["id"]);
+    $sql = "DELETE FROM classes WHERE class_id = $id";
     $result = $connection->query($sql);
-    $classes = array();
-    while($row = $result->fetch_assoc()){
-        $classes[] = $row;
+
+    if($result){
+        echo json_encode(["success" => "Classe eliminata con successo"]);
+    } else {
+        echo json_encode("Errore: ".$connection->error);
     }
-    echo json_encode($classes);
 }
+
+$connection->close();
