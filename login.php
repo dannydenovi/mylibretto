@@ -71,11 +71,22 @@ if (isset($_SESSION['id'])) {
             generateLogin();
         }
     });
-
+    $(document).on('keypress',function(e) {
+        if(e.which == 13) {
+            $("#action").click();
+        }
+    });
     //Quando viene cliccato il tasto "Login" viene effettuato il login
     //Nel caso in cui il bottone sia "Registrati" viene effettuata la registrazione
     $("#action").click(function() {
         if ($("#action").text() === "Login") {
+            login();
+        } else {
+            register();
+        }
+    });
+
+    function login() {
             $.ajax({
                 url: "php/loginManager.php",
                 type: "POST",
@@ -99,8 +110,11 @@ if (isset($_SESSION['id'])) {
                     console.log(error);
                 },
             });
-        } else {
-            $.ajax({
+        }
+    
+
+    function register(){
+        $.ajax({
                 url: "php/loginManager.php",
                 type: "POST",
                 data: {
@@ -127,6 +141,6 @@ if (isset($_SESSION['id'])) {
                     $("#error").text("Email o password errati");
                 }
             });
-        }
-    });
+    }
+
 </script>

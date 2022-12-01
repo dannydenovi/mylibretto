@@ -70,6 +70,7 @@ function addExam(){
         $mark = $connection->real_escape_string($_POST['mark']);
         $professor = $connection->real_escape_string($_POST['professor']);
         $exam_date = $connection->real_escape_string($_POST['exam_date']);
+        $eligibility = $connection->real_escape_string($_POST['eligibility']);
 
         $error = [];
 
@@ -77,9 +78,9 @@ function addExam(){
             $error["subject"] = "Inserisci il nome dell'esame";
         if (!$cfu || !is_numeric($cfu))
             $error["cfu"] = "Inserisci il numero di CFU";
-        if (!$mark || !is_numeric($mark) || $mark < 18 || $mark > $laude_value)
+        if ((!$mark || !is_numeric($mark) || $mark < 18 || $mark > $laude_value) && !$eligibility )
             $error["mark"] = "Inserisci la tua votazione";
-        if (!$professor)
+        if (!$professor || !is_string($professor))
             $error["professor"] = "Inserisci il nome del professore";
         if (!$exam_date)
             $error["exam_date"] = "Inserisci la data dell'esame";
@@ -87,7 +88,7 @@ function addExam(){
         if (count($error) > 0) {
             echo json_encode($error);
         } else {
-            $sql = "INSERT INTO exams (user_id, subject, cfu, mark, professor, exam_date) VALUES (".$_SESSION['id'].", '$subject', '$cfu', '$mark', '$professor', '$exam_date')";
+            $sql = "INSERT INTO exams (user_id, subject, cfu, mark, professor, exam_date, eligibility) VALUES (".$_SESSION['id'].", '$subject', '$cfu', '$mark', '$professor', '$exam_date', '$eligibility')";
 
             if($connection->query($sql) === TRUE){
                 echo json_encode(['success' => true]);
@@ -116,7 +117,7 @@ function updateExam(){
         $professor = $connection->real_escape_string($_PUT['professor']);
         $exam_date = $connection->real_escape_string($_PUT['exam_date']);
         $id = $connection->real_escape_string($_PUT['id']);
-
+        $eligibility = $connection->real_escape_string($_PUT['eligibility']);
 
         $error = [];
 
@@ -124,7 +125,7 @@ function updateExam(){
             $error["subject"] = "Inserisci il nome dell'esame";
         if (!$cfu || !is_numeric($cfu))
             $error["cfu"] = "Inserisci il numero di CFU";
-        if (!$mark || !is_numeric($mark) || $mark < 18 || $mark > $laude_value)
+        if ((!$mark || !is_numeric($mark) || $mark < 18 || $mark > $laude_value) && !$eligibility )
             $error["mark"] = "Inserisci la tua votazione";
         if (!$professor)
             $error["professor"] = "Inserisci il nome del professore";
@@ -134,7 +135,7 @@ function updateExam(){
         if (count($error) > 0) {
             echo json_encode($error);
         } else {
-            $sql = "UPDATE exams SET subject = '$subject', cfu = '$cfu', mark = '$mark', professor = '$professor', exam_date = '$exam_date' WHERE id = ". $id;
+            $sql = "UPDATE exams SET subject = '$subject', cfu = '$cfu', mark = '$mark', professor = '$professor', exam_date = '$exam_date', eligibility = '$eligibility'  WHERE id = ". $id ." AND user_id = ".$_SESSION['id'];
 
             if($connection->query($sql) === TRUE){
                 echo json_encode(['success' => true]);

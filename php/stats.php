@@ -22,7 +22,7 @@ if ($_GET["action"] === "cfu") {
         echo json_encode(['error' => 'Errore nel caricamento dei CFU']);
     }
 } else if ($_GET["action"] === "averages") {
-    $sql = "SELECT cfu, mark, exam_date FROM exams WHERE user_id = " . $_SESSION['id'] ." ORDER BY exam_date ASC";
+    $sql = "SELECT cfu, mark, exam_date, eligibility FROM exams WHERE user_id = " . $_SESSION['id'] ." ORDER BY exam_date ASC";
 
     if ($result = $connection->query($sql)) {
         $exams = [];

@@ -10,6 +10,7 @@ var cfu = $("#cfu")
 var professor = $("#professor")
 var exam_date = $("#exam_date")
 var mark = $("#mark")
+var eligibility = $("#eligibility");
 
 
 //Al caricamento della pagina viene definita la funzione che se cliccato sul tasto aggiungi
@@ -28,6 +29,23 @@ $(document).ready(function () {
         newModalInstance(0, {});
     });
     getExams();
+});
+
+
+eligibility.change(function () {
+    if (eligibility.prop('checked')) {
+        eligibility.val('1');
+        mark.val('0');
+        professor.val('-');
+        $("#markComponent").hide();
+        $("#professorComponent").hide();
+    } else {
+        eligibility.val('0');
+        mark.val('');
+        professor.val('');
+        $("#markComponent").show();
+        $("#professorComponent").show();
+    }
 });
 
 
@@ -80,6 +98,14 @@ function newModalInstance(mode, data) {
     exam_date.val("" || data.exam_date);
     mark.val("" || data.mark);
 
+    if(data.eligibility === "1"){
+        eligibility.prop('checked', true);
+        eligibility.val('1')
+    } else {
+        eligibility.prop('checked', false);
+        eligibility.val('0')
+    }
+
     //Viene mostrato il modal
     addSubjectModal.modal("show");
 }
@@ -96,11 +122,12 @@ function getExams() {
             if (!json.error) {
                 var exams = json.exams;
                 var max_laude = json.info.laude_value;
-                var total_credits = parseInt(json.info.total_credits);
                 var effective_credits = 0;
                 var html = "";
                 var average = 0;
                 var mean = 0;
+                var numEligible = 0;
+
                 $("#marksTable").empty();
                 for (var i = 0; i < exams.length; i++) {
                     html += "<tr id=" + exams[i].id + ">";
@@ -108,17 +135,25 @@ function getExams() {
                     html += "<td>" + exams[i].professor + "</td>";
                     html += "<td>" + convertDate(exams[i].exam_date) + "</td>";
                     html += "<td>" + exams[i].cfu + "</td>";
-                    html += "<td>" + (exams[i].mark > 30 ? "30 e lode" : exams[i].mark) + "</td>";
+                    if(exams[i].eligibility === "0")
+                        html += "<td>" + (exams[i].mark > 30 ? "30 e lode" : exams[i].mark) + "</td>";
+                    else
+                        html += "<td>" + "Idoneità/Attività" + "</td>";
                     html += "<td>";
                     html += "<button type='button' class='btn btn-warning m-2' onclick='getExam(" + exams[i].id + ")'><i class='bi bi-pen' ></i></button>";
                     html += "<button type='button' class='btn btn-danger m-2' onclick='deleteExam(" + exams[i].id + ")'><i class='bi bi-trash'></i></button></td>";
                     html += "</tr>";
-                    average += parseInt(exams[i].mark);
-                    mean += (parseInt(exams[i].mark) * parseInt(exams[i].cfu));
-                    effective_credits += parseInt(exams[i].cfu);
+
+                    if(exams[i].eligibility === "0"){
+                        average += parseInt(exams[i].mark);
+                        mean += (parseInt(exams[i].mark) * parseInt(exams[i].cfu));
+                        effective_credits += parseInt(exams[i].cfu);
+                    } else {
+                        numEligible++;
+                    }
                 }
                 //Vengono calcolate la media aritmetica e la media ponderata
-                average /= exams.length;
+                average /= exams.length - numEligible;
                 mean /= effective_credits;
 
                 //Vengono mostrati i dati relativi al libretto
@@ -155,15 +190,15 @@ function getExam(id) {
 //Questa funzione si occupa di aggiungere un esame e di aggiorna la lista
 function addExam() {
     $.ajax({
-        type: "PUT",
+        type: "POST",
         url: "../php/exams.php",
         data: {
-            action: "setExams",
             subject: subject.val(),
             cfu: cfu.val(),
             professor: professor.val(),
             exam_date: exam_date.val(),
-            mark: mark.val()
+            mark: mark.val(),
+            eligibility: eligibility.val()
         },
         cache: false,
         success: function (data) {

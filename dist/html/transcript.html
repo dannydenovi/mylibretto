@@ -60,7 +60,7 @@
                     <label for="cfu" class="form-label">CFU</label>
                     <input type="text" class="form-control" id="cfu" placeholder="CFU">
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" id="professorComponent">
                     <label for="professor" class="form-label">Docente</label>
                     <input type="text" class="form-control" id="professor" placeholder="Docente">
                 </div>
@@ -68,9 +68,13 @@
                     <label for="exam_date" class="form-label">Data</label>
                     <input type="date" class="form-control" id="exam_date" placeholder="Data">
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" id="markComponent">
                     <label for="mark" class="form-label">Voto (per la lode inserisci il suo valore)</label>
-                    <input type="number" class="form-control" id="mark" placeholder="Voto" min="18">
+                    <input type="number" class="form-control" id="mark" placeholder="Voto">
+                </div>
+                <div class="mb-3">
+                    <label for="eligibility" class="check-form-label">Idoneità/attività: </label>
+                    <input type="checkbox" class="check-form-control" id="eligibility">
                 </div>
             </div>
             <div class="modal-footer">

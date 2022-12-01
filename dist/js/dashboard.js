@@ -8,11 +8,12 @@ function convertDate(date) {
 //Viene recuperata l'università e il corso di studi per poi mostrarlo sulla Dashboard
 function getUniversity() {
     $.ajax({
-        url: "./php/user.php",
+        url: "../php/user.php",
         type: "GET",
         success: function (data) {
-            $("#university").text(data.university);
-            $("#course").text(data.faculty);
+            var json = JSON.parse(data);
+            $("#university").text(json.university);
+            $("#course").text(json.faculty);
         }
     });
 }
@@ -189,15 +190,21 @@ function getStats() {
                 var mean = []
                 var markFrequencies = {};
                 var maxValue = "";
+                var numEligible = 0;
 
                 //Vengono calcolate le medie aritmetica e esponenziale e vengono salvate le date, i voti e le medie in un array
                 for (var i = 0; i < json.exams.length; i++) {
                     //Vengono convertite le date in formato dd/mm/yyyy
+                    if(json.exams[i].eligibility == "1"){
+                        numEligible++;
+                        continue;
+                    }
+                    
                     dates.push(String(convertDate(json.exams[i].exam_date)));
                     sumAverage += parseInt(json.exams[i].mark);
                     sumMean += (parseInt(json.exams[i].mark) * parseInt(json.exams[i].cfu));
                     sumCfu += parseInt(json.exams[i].cfu);
-                    averages.push((parseInt(sumAverage) / parseInt(i + 1)).toFixed(2));
+                    averages.push((parseInt(sumAverage) / (parseInt(i + 1) - numEligible)).toFixed(2));
                     mean.push((parseInt(sumMean) / parseInt(sumCfu)).toFixed(2));
 
                     //Se il voto è superiore a 30 allora viene identificato come 30 e lode e viene salvato come tale in un json
@@ -224,13 +231,13 @@ function getStats() {
 
 
                 //Viene calcolata la base del voto di laurea con la formula (media ponderata * 11) / 3 e viene costruito il grafico che è recuperato da una chiamata https
-                var expectedDegreeMark = ((mean[json.exams.length - 1] * 11) / 3).toFixed(2);
+                var expectedDegreeMark = ((mean[json.exams.length - numEligible - 1] * 11) / 3).toFixed(2);
                 var url = "https://quickchart.io/chart?c={type:'radialGauge',data:{datasets:[{data:[" + expectedDegreeMark + "]}]}, options: {domain: [0,110], animation: {animateRotate: true}, centerArea: {text: " + expectedDegreeMark + "}}}";
                 $("#expectedDegreeMark").attr("src", url);
                 $("#expectedDegreeMarkLabel").html("Previsto: " + expectedDegreeMark);
 
                 //Viene mostrata la media aritmetica e esponenziale nella card relativa alle medie e costruito il grafico
-                $("#averageLabel").html("Media aritmetica: " + averages[json.exams.length - 1] + "<br> Media ponderata: " + mean[json.exams.length - 1]);
+                $("#averageLabel").html("Media aritmetica: " + averages[json.exams.length - numEligible - 1] + "<br> Media ponderata: " + mean[json.exams.length - numEligible - 1]);
                 buildLineChart(average, dates, averages, mean);
 
                 //Viene mostrato il voto più frequente nella card relativa ai voti e costruito il grafico a torta
