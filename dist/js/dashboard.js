@@ -160,9 +160,9 @@ function getStats() {
             if (!json.error) {
                 //Se non vi sono errori viene mostrato il numero di cfu e costruito il grafico
                 //È importante recuperare i crediti totali e quelli ottenuti per poter calcolare il relativo percentuale e per identificare il dominio del grafico
-                var missingCfu = parseInt(json.total_credits) - parseInt(json.cfu);
+                var missingCfu = parseFloat(json.total_credits) - parseFloat(json.cfu);
                 $("#cfuLeft").html("Mancanti: " + (missingCfu || "180"));
-                var url = "https://quickchart.io/chart?c={type:'radialGauge',data:{datasets:[{data:[" + parseInt(json.cfu) + "]}]}, options: {domain: [0," + parseInt(json.total_credits) + "]}}";
+                var url = "https://quickchart.io/chart?c={type:'radialGauge',data:{datasets:[{data:[" + parseFloat(json.cfu) + "]}]}, options: {domain: [0," + parseFloat(json.total_credits) + "], centerArea: {text: " + parseFloat(json.cfu) + "}}}";
                 $("#cfuGraph").attr("src", url);
             }
         }

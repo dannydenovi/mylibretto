@@ -101,9 +101,15 @@ function newModalInstance(mode, data) {
     if(data.eligibility === "1"){
         eligibility.prop('checked', true);
         eligibility.val('1')
+        $("#markComponent").hide();
+        $("#professorComponent").hide();
+        mark.val('0');
+        professor.val('-');
     } else {
         eligibility.prop('checked', false);
         eligibility.val('0')
+        $("#markComponent").show();
+        $("#professorComponent").show();
     }
 
     //Viene mostrato il modal
@@ -226,7 +232,8 @@ function editExam() {
             cfu: cfu.val(),
             professor: professor.val(),
             exam_date: exam_date.val(),
-            mark: mark.val()
+            mark: mark.val(),
+            eligibility: eligibility.val()
         },
         cache: false,
         success: function (data) {

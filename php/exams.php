@@ -76,7 +76,7 @@ function addExam(){
 
         if (!$subject)
             $error["subject"] = "Inserisci il nome dell'esame";
-        if (!$cfu || !is_numeric($cfu))
+        if ((!$cfu || !is_numeric($cfu)) && $cfu != 0)
             $error["cfu"] = "Inserisci il numero di CFU";
         if ((!$mark || !is_numeric($mark) || $mark < 18 || $mark > $laude_value) && !$eligibility )
             $error["mark"] = "Inserisci la tua votazione";
@@ -123,7 +123,7 @@ function updateExam(){
 
         if (!$subject)
             $error["subject"] = "Inserisci il nome dell'esame";
-        if (!$cfu || !is_numeric($cfu))
+        if ((!$cfu || !is_numeric($cfu)) && $cfu != 0)
             $error["cfu"] = "Inserisci il numero di CFU";
         if ((!$mark || !is_numeric($mark) || $mark < 18 || $mark > $laude_value) && !$eligibility )
             $error["mark"] = "Inserisci la tua votazione";
