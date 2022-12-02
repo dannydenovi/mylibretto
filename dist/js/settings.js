@@ -78,7 +78,6 @@ function editUser() {
         },
         success: function (data) {
             var json = JSON.parse(data);
-            console.log(json);
             if (json.success) {
                 window.location.href = "index.php";
             } else {
@@ -90,7 +89,6 @@ function editUser() {
         }
     });
 }
-
 
 function deleteUser() {
     $.ajax({
@@ -104,7 +102,6 @@ function deleteUser() {
             if (json.success) {
                 window.location.href = "index.php";
             } else {
-                console.log(json);
                 validation(json);
             }
         },
