@@ -11,6 +11,13 @@ var professor = $("#professor")
 var exam_date = $("#exam_date")
 var mark = $("#mark")
 var eligibility = $("#eligibility");
+var predictionModal = $("#predictionModal");
+var predictionButton = $("#predictionButton");
+var predictionTable = $("#predictionTable");
+var predictionTableBody = $("#predictionTableBody");
+var cfuPrediction = $("#cfuPrediction");
+var max_laude = 30;
+var exams = [];
 
 
 //Al caricamento della pagina viene definita la funzione che se cliccato sul tasto aggiungi
@@ -28,6 +35,14 @@ $(document).ready(function () {
     $("#addSubjButton").click(function () {
         newModalInstance(0, {});
     });
+    $("#prediction").click(function () {
+        cfuPrediction.val("");
+        predictionTable.attr("hidden", true);
+        predictionModal.modal("show");
+    });
+    predictionButton.click(function() {
+        predict();
+    })
     getExams();
 });
 
@@ -67,6 +82,26 @@ function validateExam(data) {
     data.mark ? mark.addClass("is-invalid") : mark.removeClass("is-invalid");
 }
 
+function predict(){
+    var mean = 0;
+    var cfu = 0;
+    var rows = ""
+    predictionTableBody.empty();
+    for (var i = 0; i < exams.length; i++) {
+        if (exams[i].eligibility == 0) {
+            mean += parseInt(exams[i].mark * exams[i].cfu);
+            cfu += parseInt(exams[i].cfu);
+        }
+    }
+    for (var i = 18; i <= 30; i++) {
+        var prediction = parseFloat((mean + i * parseInt(cfuPrediction.val())) / (cfu + parseInt(cfuPrediction.val()))).toFixed(2);
+        rows += "<tr><td>" + i + "</td><td>" + prediction + "</td></tr>";
+    }
+    var prediction = parseFloat((mean + max_laude * parseInt(cfuPrediction.val())) / (cfu + parseInt(cfuPrediction.val()))).toFixed(2);
+    rows += "<tr><td>30L</td><td>" + prediction + "</td></tr>";
+    predictionTableBody.append(rows);
+    predictionTable.removeAttr("hidden");
+}
 
 //Questa funzione si occupa di generare il modal corretto in base al tasto che lo apre
 function newModalInstance(mode, data) {
@@ -126,8 +161,8 @@ function getExams() {
         success: function (data) {
             var json = JSON.parse(data);
             if (!json.error) {
-                var exams = json.exams;
-                var max_laude = json.info.laude_value;
+                exams = json.exams;
+                max_laude = json.info.laude_value;
                 var effective_credits = 0;
                 var html = "";
                 var average = 0;
@@ -168,7 +203,7 @@ function getExams() {
                 $("#marksTable").append(html);
                 $("#mark").attr("max", max_laude);
             } else {
-                alert(json.error);
+                console.log(json.error);
             }
         }
     });
@@ -185,7 +220,6 @@ function getExam(id) {
         },
         success: function (data) {
             var json = JSON.parse(data);
-            console.log(json);
             newModalInstance(EDIT_SUBJECT, json.exams[0]);
         }
     });
@@ -209,7 +243,6 @@ function addExam() {
         cache: false,
         success: function (data) {
             var json = JSON.parse(data);
-            console.log(json);
             if (json.success) {
                 $('#addSubjectModal').modal('hide');
                 getExams();

@@ -15,6 +15,9 @@
                 <button type="button" class="btn btn-primary" id="addSubjButton">
                     <i class="bi bi-plus"></i>Aggiungi Esame
                 </button>
+                <button type="button" class="btn btn-secondary" id="prediction">
+                    <i class="bi bi-chat-dots"></i> Predizione
+                </button>
             </div>
         </div>
         <br>
@@ -43,7 +46,7 @@
 
 
 
-<!-- Modal -->
+<!-- Modal esame-->
 <div class="modal fade" id="addSubjectModal" tabindex="-1" aria-labelledby="addSubjectModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -81,6 +84,41 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                 <button type="button" class="btn btn-primary" id="addSubject">Aggiungi</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal predizione-->
+<div class="modal fade" id="predictionModal" tabindex="-1" aria-labelledby="predictionModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addSubjectModalLabel">Predizione</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="cfuPrediction" class="form-label">CFU Materia</label>
+                    <input type="text" class="form-control" id="cfuPrediction" placeholder="CFU Materia">
+                </div>
+                <div class="mb-3">
+                    <table class="table table-hover" id="predictionTable" hidden>
+                        <thead>
+                            <tr>
+                                <th scope="col">Voto</th>
+                                <th scope="col">Media Pesata</th>
+                            </tr>
+                        </thead>
+                        <tbody id="predictionTableBody">
+        
+                        </tbody>
+                    </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" id="predictionButton">Predici</button>
+            </div>
+
         </div>
     </div>
 </div>

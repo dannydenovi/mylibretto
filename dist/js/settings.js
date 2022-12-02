@@ -42,6 +42,7 @@ function validation(data) {
     var email = $("#email");
     var password = $("#password");
     var passwordConfirmation = $("#passwordConfirmation");
+    var passwordDeletion = $("#passwordDeletion");
     var university = $("#university");
     var faculty = $("#faculty");
     var laudeValue = $("#laudeValue");
@@ -52,6 +53,7 @@ function validation(data) {
     data.email ? email.addClass("is-invalid") : email.removeClass("is-invalid");
     data.password ? password.addClass("is-invalid") : password.removeClass("is-invalid");
     data.password ? passwordConfirmation.addClass("is-invalid") : passwordConfirmation.removeClass("is-invalid");
+    data.passwordDeletion ? passwordDeletion.addClass("is-invalid") : passwordDeletion.removeClass("is-invalid");
     data.university ? university.addClass("is-invalid") : university.removeClass("is-invalid");
     data.faculty ? faculty.addClass("is-invalid") : faculty.removeClass("is-invalid");
     data.laude_value ? laudeValue.addClass("is-invalid") : laudeValue.removeClass("is-invalid");
@@ -89,10 +91,44 @@ function editUser() {
     });
 }
 
+
+function deleteUser() {
+    $.ajax({
+        url: "../php/user.php",
+        type: "DELETE",
+        data: {
+            passwordDeletion: $("#passwordDeletion").val()
+        },
+        success: function (data) {
+            var json = JSON.parse(data);
+            if (json.success) {
+                window.location.href = "index.php";
+            } else {
+                console.log(json);
+                validation(json);
+            }
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+}
+
 $(document).ready(function () {
     getUniversities();
 });
 
 $("#editUser").click(function () {
     editUser();
+});
+
+$("#deleteUserButtonModal").click(function () {
+    $("#passwordDeletion").val("");
+    $("#passwordDeletion").removeClass("is-invalid");
+    $("#deletionModal").modal("show");
+});
+
+
+$("#deleteUserButton").click(function () {
+    deleteUser();
 });

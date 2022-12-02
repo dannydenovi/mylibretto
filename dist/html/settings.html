@@ -44,10 +44,35 @@
                 <label for="cfu" class="form-label">Totale CFU</label>
                 <input type="text" class="form-control" id="cfu" placeholder="Totale CFU">
             </div>
-            <div class="col-12">
-                <button type="button" class="btn btn-primary" id="editUser">Modifica</button>
+            <div class="col-12 mt-5">
+                <button type="button" class="btn btn-primary mb-2" id="editUser">Modifica</button>
+                <button type="button" class="btn btn-danger mb-2" id="deleteUserButtonModal">Elimina Account</button>
             </div>
         </div>
         <br>
+    </div>
+</div>
+
+<!-- Modal eliminazione-->
+<div class="modal fade" id="deletionModal" tabindex="-1" aria-labelledby="deletionModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addSubjectModalLabel">Eliminazione Account</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Sei sicuro di voler eliminare il tuo account? Tutti i tuoi dati verranno eliminati e saranno irrecuperabili.</p>
+                <div class="mb-3">
+                    <label for="passwordDeletion" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="passwordDeletion" placeholder="Password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-danger" id="deleteUserButton">Elimina Account</button>
+            </div>
+
+        </div>
     </div>
 </div>
