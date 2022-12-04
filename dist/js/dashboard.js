@@ -134,13 +134,15 @@ function buildPieChart(elem, labels, data) {
                 ],
                 borderWidth: 2
             }]
+        },
+        options: {
+            aspectRatio: 1.5,
         }
     });
 }
 
 //Questa funzione è responsabile di recuperare i dati relativi agli esami dell'utente loggato, identificato tramite l'id salvato in sessione
 function getStats() {
-
 
     //Vengono identificati gli elementi html in cui inserire i grafici
     const average = document.getElementById('average').getContext('2d');
@@ -161,7 +163,7 @@ function getStats() {
                 //Se non vi sono errori viene mostrato il numero di cfu e costruito il grafico
                 //È importante recuperare i crediti totali e quelli ottenuti per poter calcolare il relativo percentuale e per identificare il dominio del grafico
                 var missingCfu = parseFloat(json.total_credits) - parseFloat(json.cfu);
-                $("#cfuLeft").html("Mancanti: " + (missingCfu || "180"));
+                $("#cfuLeft").html("Mancanti: " + (missingCfu ? missingCfu : json.total_credits) );
                 var url = "https://quickchart.io/chart?c={type:'radialGauge',data:{datasets:[{data:[" + parseFloat(json.cfu) + "]}]}, options: {domain: [0," + parseFloat(json.total_credits) + "], centerArea: {text: " + parseFloat(json.cfu) + "}}}";
                 $("#cfuGraph").attr("src", url);
             }
@@ -220,14 +222,19 @@ function getStats() {
 
                 //Vengono salvati i voti e le frequenze in due array in modo tale da poter costruire il grafico
                 for (var key in markFrequencies) {
+
                     quantities.push(markFrequencies[key]);
                     marks.push(key);
 
-                    //Viene identificato il voto più frequente
-                    if (maxValue == "" || markFrequencies[key] > markFrequencies[maxValue]) {
-                        maxValue = key;
-                    }
                 }
+
+                const getMax = markFrequencies => {
+                    return Object.keys(markFrequencies).filter(x => {
+                         return markFrequencies[x] == Math.max.apply(null, 
+                         Object.values(markFrequencies));
+                   });
+                };
+            
 
 
                 //Viene calcolata la base del voto di laurea con la formula (media ponderata * 11) / 3 e viene costruito il grafico che è recuperato da una chiamata https
@@ -241,8 +248,8 @@ function getStats() {
                 buildLineChart(average, dates, averages, mean);
 
                 //Viene mostrato il voto più frequente nella card relativa ai voti e costruito il grafico a torta
-                $("#mostCommonMarkLabel").html("Voto più frequente: " + maxValue);
                 buildPieChart(marksPie, marks, quantities)
+                $("#mostFrequentMark").html("Voto più frequente: " + getMax(markFrequencies));
 
 
             } else {
