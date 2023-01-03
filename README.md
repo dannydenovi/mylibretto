@@ -77,7 +77,7 @@ MyLibretto è hostata in modo gratuito sui server di [Altervista.org](https://al
 
 ### Frontend
 
-Il frontend è realizzato con [Bootstrap](https://getbootstrap.com/) per poter ottenere un aspetto gradevole e responsive, bootstrap mette a disposizione un file css che definisce per delle classi specifiche degli stili. È stata utilizzata la versione 5.1 e gli elementi sono la NavBar, i Buttons, Forms e Cards. Per le icone è stato utilizzato il pacchetto [Bootstrap Icons](https://icons.getbootstrap.com/), il quale mette a disposizione degli asset di immagini vettoriali. Per entrambi è possibile l'implementazione via download del sorgente oppure tramite **CDN**, in entrambi i casi inserendo i marcatori \<link> e \<script>. Nel caso di MyLibretto Bootstrap è stato implementato scaricando il sorgente *minified* e Bootstrap Icons tramite CDN.
+Il frontend è realizzato con [Bootstrap](https://getbootstrap.com/) per poter ottenere un aspetto gradevole e responsive, bootstrap mette a disposizione un file css che definisce per delle classi specifiche degli stili. È stata utilizzata la versione 5.1 e gli elementi sono la NavBar, i Buttons, Forms e Cards. Per le icone è stato utilizzato il pacchetto [Bootstrap Icons](https://icons.getbootstrap.com/), il quale mette a disposizione degli asset di immagini vettoriali. Per entrambi è possibile l'implementazione via download del sorgente oppure tramite **CDN**, in entrambi i casi inserendo i marcatori \<link> e \<script>. Nel caso di MyLibretto Bootstrap è stato implementato scaricando il sorgente *minified* e Bootstrap Icons tramite CDN. I grafici sulla dashboard sono realizzati utilizzando Chart.js, mentre le progress bar tramite api [Quickchart.io](https://quickchart.io)
 
 ![mobile](https://user-images.githubusercontent.com/70696078/210415593-bb6e9612-285f-4f73-889b-0f5c43ef3ba8.png)
 
@@ -93,4 +93,3 @@ Il database contiene le seguenti tabelle: *classes*, *exams*, *infos*, *taxes*, 
 
 Di seguito il diagramma logico:
 ![logic](https://user-images.githubusercontent.com/70696078/210415533-eb47ac46-f0a7-41d2-a9a7-957f673496f2.png)
-
