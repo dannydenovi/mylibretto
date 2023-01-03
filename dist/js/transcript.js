@@ -171,7 +171,7 @@ function getExams() {
 
                 $("#marksTable").empty();
                 for (var i = 0; i < exams.length; i++) {
-                    html += "<tr id=" + exams[i].id + ">";
+                    html += "<tr id=" + exams[i].exam_id + ">";
                     html += "<td>" + exams[i].subject + "</td>";
                     html += "<td>" + exams[i].professor + "</td>";
                     html += "<td>" + convertDate(exams[i].exam_date) + "</td>";
@@ -181,8 +181,8 @@ function getExams() {
                     else
                         html += "<td>" + "Idoneità/Attività" + "</td>";
                     html += "<td>";
-                    html += "<button type='button' class='btn btn-warning m-2' onclick='getExam(" + exams[i].id + ")'><i class='bi bi-pen' ></i></button>";
-                    html += "<button type='button' class='btn btn-danger m-2' onclick='deleteExam(" + exams[i].id + ")'><i class='bi bi-trash'></i></button></td>";
+                    html += "<button type='button' class='btn btn-warning m-2' onclick='getExam(" + exams[i].exam_id + ")'><i class='bi bi-pen' ></i></button>";
+                    html += "<button type='button' class='btn btn-danger m-2' onclick='deleteExam(" + exams[i].exam_id + ")'><i class='bi bi-trash'></i></button></td>";
                     html += "</tr>";
 
                     if(exams[i].eligibility === "0"){

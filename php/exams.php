@@ -37,7 +37,7 @@ function getExams(){
     $sql = "SELECT * FROM exams WHERE user_id = " . $_SESSION['id'];
 
     if ($_GET["id"])
-        $sql .= " AND id = ".$_GET['id'];
+        $sql .= " AND exam_id = ".$_GET['id'];
 
     $sql .= " ORDER BY exam_date DESC";
     if ($result = $connection->query($sql)) {
@@ -135,7 +135,7 @@ function updateExam(){
         if (count($error) > 0) {
             echo json_encode($error);
         } else {
-            $sql = "UPDATE exams SET subject = '$subject', cfu = '$cfu', mark = '$mark', professor = '$professor', exam_date = '$exam_date', eligibility = '$eligibility'  WHERE id = ". $id ." AND user_id = ".$_SESSION['id'];
+            $sql = "UPDATE exams SET subject = '$subject', cfu = '$cfu', mark = '$mark', professor = '$professor', exam_date = '$exam_date', eligibility = '$eligibility'  WHERE exam_id = ". $id ." AND user_id = ".$_SESSION['id'];
 
             if($connection->query($sql) === TRUE){
                 echo json_encode(['success' => true]);
@@ -149,7 +149,7 @@ function updateExam(){
 function deleteExam(){
     global $connection;
     parse_str(file_get_contents('php://input'), $_DELETE);
-    $sql = "DELETE FROM exams WHERE id = ".$_DELETE['id'];
+    $sql = "DELETE FROM exams WHERE exam_id = ".$_DELETE['id'];
     if($connection->query($sql) === TRUE){
         echo json_encode(['success' => true]);
     } else {
