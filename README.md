@@ -3,6 +3,8 @@
 
 La web app MyLibretto è un portale tramite il quale tenere traccia della carriera universitaria. Vi è la possibilità di gestire i voti, le attività dello studente, le tasse e l'orario delle lezioni.
 
+Il sito è consultabile [qui](http://mylibrettoprogetto.altervista.org) con credenziali dannydenovi@gmail.com e password esameweb.
+Il sorgente può essere trovato nella repository [MyLibretto GitHub](https://github.com/dannydenovi/mylibretto)
 
 ## Login e Registrazione
 In fase di login viene richiesta la mail di registrazione e la password per poter accedere. Al click sul tasto "Registrati" vengono mostrati i campi necessari alla registrazione. La lista delle università è ottenuta tramite l'API [university-domains-list](https://github.com/Hipo/university-domains-list) che contiene la lista di tutte le università italiane. 
