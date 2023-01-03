@@ -38,9 +38,9 @@ Per l'aggiunta/modifica è necessario inserire il nome della materia, i CFU, il 
 Alla pressione del tasto elimina un'animazione fade-out farà sparire dalla lista l'attività/esame. 
 Ciascuna funzionalità è implementata in AJAX in modo tale da evitare il refresh della pagina. L'implementazione verrà discussa successivamente.
 
-	<img width="1412" alt="libretto" src="https://user-images.githubusercontent.com/70696078/210415236-d1bd50fe-d417-498e-a1b8-9c9634f9b0c0.png">
+<img width="1412" alt="libretto" src="https://user-images.githubusercontent.com/70696078/210415236-d1bd50fe-d417-498e-a1b8-9c9634f9b0c0.png">
 
-	<img width="1380" alt="addsubj" src="https://user-images.githubusercontent.com/70696078/210415251-e7ee0611-72e6-400d-918c-f436fc002396.png">
+<img width="1380" alt="addsubj" src="https://user-images.githubusercontent.com/70696078/210415251-e7ee0611-72e6-400d-918c-f436fc002396.png">
 
 
 È anche possibile effettuare predizioni sull'andamento della media inserendo il peso dell'esame che si dovrà sostenere in modo tale da vedere la variazione della media per ciascun voto. 
