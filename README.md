@@ -60,6 +60,7 @@ All'aggiunta/modifica viene richiesto il nome della materia, il docente, il gior
 ## Tasse
 
 La sezione **Tasse** presenta una lista delle tasse pagate/da pagare con la possibilità di aggiungerne di nuove o modificare/eliminare quelle esistenti. Vi è nel momento dell'inserimento la possibilità di spuntare una checkbox per segnare la tassa come pagata. 
+
 <img width="1353" alt="taxes" src="https://user-images.githubusercontent.com/70696078/210415386-2e296295-cad4-4d51-bac8-0e128e198853.png">
 
 	
@@ -68,8 +69,8 @@ La sezione **Tasse** presenta una lista delle tasse pagate/da pagare con la poss
 
 Vi è la possibilità di modificare le impostazioni inserite durante la registrazione nella sezione **impostazioni**. 
 Vi è la necessità che tutti i campi siano riempiti eccetto quelli della modifica password se non si è intenzionati a modificarla. Si può anche eliminare l'account e un modal chiederà la conferma dove si chiederà di reinserire la password per accertarsi che non sia stato premuto per errore e che sia l'utente proprietario a farlo.
-<img width="1364" alt="settings" src="https://user-images.githubusercontent.com/70696078/210415425-ea9bb4b9-9865-4dc6-91ad-77dd9d837595.png">
 
+<img width="1364" alt="settings" src="https://user-images.githubusercontent.com/70696078/210415425-ea9bb4b9-9865-4dc6-91ad-77dd9d837595.png">
 
 
 
@@ -79,7 +80,7 @@ MyLibretto è hostata in modo gratuito sui server di [Altervista.org](https://al
 
 ### Frontend
 
-Il frontend è realizzato con [Bootstrap](https://getbootstrap.com/) per poter ottenere un aspetto gradevole e responsive, bootstrap mette a disposizione un file css che definisce per delle classi specifiche degli stili. È stata utilizzata la versione 5.1 e gli elementi sono la NavBar, i Buttons, Forms e Cards. Per le icone è stato utilizzato il pacchetto [Bootstrap Icons](https://icons.getbootstrap.com/), il quale mette a disposizione degli asset di immagini vettoriali. Per entrambi è possibile l'implementazione via download del sorgente oppure tramite **CDN**, in entrambi i casi inserendo i marcatori \<link> e \<script>. Nel caso di MyLibretto Bootstrap è stato implementato scaricando il sorgente *minified* e Bootstrap Icons tramite CDN. I grafici sulla dashboard sono realizzati utilizzando Chart.js, mentre le progress bar tramite api [Quickchart.io](https://quickchart.io)
+Il frontend è realizzato con [Bootstrap](https://getbootstrap.com/) per poter ottenere un aspetto gradevole e responsive, bootstrap mette a disposizione un file css che definisce per delle classi specifiche degli stili. È stata utilizzata la versione 5.1 e gli elementi sono la NavBar, i Buttons, Forms e Cards. Per le icone è stato utilizzato il pacchetto [Bootstrap Icons](https://icons.getbootstrap.com/), il quale mette a disposizione degli asset di immagini vettoriali. Per entrambi è possibile l'implementazione via download del sorgente oppure tramite **CDN**, in entrambi i casi inserendo i marcatori \<link> e \<script>. Nel caso di MyLibretto Bootstrap è stato implementato scaricando il sorgente *minified* e Bootstrap Icons tramite CDN. I grafici sulla dashboard sono realizzati utilizzando [Chart.js](https://www.chartjs.org/), mentre le progress bar tramite api [Quickchart.io](https://quickchart.io)
 
 ![mobile](https://user-images.githubusercontent.com/70696078/210415593-bb6e9612-285f-4f73-889b-0f5c43ef3ba8.png)
 
