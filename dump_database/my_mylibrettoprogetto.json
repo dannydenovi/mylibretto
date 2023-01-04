@@ -1,0 +1,62 @@
+[
+{"type":"header","version":"5.2.0","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"my_mylibrettoprogetto"},
+{"type":"table","name":"classes","database":"my_mylibrettoprogetto","data":
+[
+{"class_id":"8","user_id":"5","name":"Sicurezza dei Sistemi","professor":"Antonino Galletta","day":"Tuesday","timeStart":"09:00","timeEnd":"11:00","place":"SBA LAB 2-2"},
+{"class_id":"9","user_id":"5","name":"Sicurezza dei Sistemi","professor":"Antonino Galletta","day":"Tuesday","timeStart":"11:00","timeEnd":"13:00","place":"MIFT A-S-1"},
+{"class_id":"12","user_id":"5","name":"Laboratorio di Intelligenza Artificiale","professor":"Mario Grasso","day":"Monday","timeStart":"09:00","timeEnd":"12:00","place":"MIFT A-S-1"},
+{"class_id":"13","user_id":"5","name":"Sicurezza dei Sistemi","professor":"Antonino Galletta","day":"Monday","timeStart":"12:00","timeEnd":"14:00","place":"SBA LAB 2-2"},
+{"class_id":"14","user_id":"5","name":"Programmazione Web e Mobile","professor":"Andrea Nucita","day":"Wednesday","timeStart":"09:00","timeEnd":"13:00","place":"MIFT A-S-1"},
+{"class_id":"15","user_id":"5","name":"Laboratorio di Intelligenza Artificiale","professor":"Mario Grasso","day":"Thursday","timeStart":"09:00","timeEnd":"12:00","place":"MIFT A-S-1"},
+{"class_id":"16","user_id":"5","name":"Sicurezza dei Sistemi","professor":"Antonino Galletta","day":"Thursday","timeStart":"12:00","timeEnd":"14:00","place":"MIFT A-S-1"},
+{"class_id":"17","user_id":"5","name":"Programmazione Web e Mobile","professor":"Andrea Nucita","day":"Friday","timeStart":"09:00","timeEnd":"13:00","place":"SBA LAB T-3"},
+{"class_id":"23","user_id":"11","name":"Istituzioni di Diritto Privato II","professor":"Prof.re Gian Antonio Benacchio","day":"Saturday","timeStart":"09:00","timeEnd":"11:00","place":"2"}
+]
+}
+,{"type":"table","name":"exams","database":"my_mylibrettoprogetto","data":
+[
+{"exam_id":"1","user_id":"5","subject":"Programmazione Ad Oggetti","mark":"31","cfu":"9","professor":"Antonino Galletta","exam_date":"2022-09-30","eligibility":"0"},
+{"exam_id":"2","user_id":"5","subject":"Sistemi Operativi","mark":"31","cfu":"12","professor":"Marco Lucio Scarpa","exam_date":"2022-09-29","eligibility":"0"},
+{"exam_id":"3","user_id":"5","subject":"Database","mark":"31","cfu":"12","professor":"Massimo Villari","exam_date":"2022-09-09","eligibility":"0"},
+{"exam_id":"4","user_id":"5","subject":"Logica per Informatica","mark":"31","cfu":"6","professor":"Marilena Crupi","exam_date":"2022-01-25","eligibility":"0"},
+{"exam_id":"5","user_id":"5","subject":"Architettura degli Elaboratori","mark":"30","cfu":"6","professor":"Dario Bruneo","exam_date":"2022-07-12","eligibility":"0"},
+{"exam_id":"6","user_id":"5","subject":"Fisica","mark":"24","cfu":"12","professor":"Mauro Federico","exam_date":"2022-05-13","eligibility":"0"},
+{"exam_id":"9","user_id":"5","subject":"Statistical Methods And Models","mark":"26","cfu":"6","professor":"David Barilla","exam_date":"2022-06-13","eligibility":"0"},
+{"exam_id":"10","user_id":"5","subject":"Reti di Calcolatori","mark":"28","cfu":"6","professor":"Antonio Puliafito","exam_date":"2022-01-18","eligibility":"0"},
+{"exam_id":"11","user_id":"5","subject":"Programmazione","mark":"26","cfu":"9","professor":"Maria Fazio","exam_date":"2021-09-06","eligibility":"0"},
+{"exam_id":"12","user_id":"5","subject":"Calcolo","mark":"23","cfu":"12","professor":"Maria Paola Speciale","exam_date":"2021-07-20","eligibility":"0"},
+{"exam_id":"13","user_id":"5","subject":"Matematica Discreta","mark":"24","cfu":"6","professor":"Luisa Carini","exam_date":"2021-01-28","eligibility":"0"},
+{"exam_id":"37","user_id":"5","subject":"Corso LaTeX A.A 2020\/2021","mark":"0","cfu":"2","professor":"-","exam_date":"2021-06-23","eligibility":"1"},
+{"exam_id":"38","user_id":"5","subject":"Debito OFA","mark":"0","cfu":"0","professor":"-","exam_date":"2021-01-28","eligibility":"1"},
+{"exam_id":"39","user_id":"5","subject":"Partecipazione a videoconferenza \"Il sistema politico Statunitense: elezioni presidenziali 2020\"","mark":"0","cfu":"0.25","professor":"-","exam_date":"2020-11-03","eligibility":"1"},
+{"exam_id":"40","user_id":"5","subject":"PES: \"D.L.81\/08 e sicurezza nei laboratori\"","mark":"0","cfu":"2","professor":"-","exam_date":"2021-02-24","eligibility":"1"},
+{"exam_id":"41","user_id":"5","subject":"Seminario \"Referendum costituzionale: il valore della rappresentanza\"","mark":"0","cfu":"0.25","professor":"-","exam_date":"2020-09-17","eligibility":"1"},
+{"exam_id":"42","user_id":"5","subject":"Fondamenti Linux e cloud per sistemi aziendali","mark":"0","cfu":"2","professor":"-","exam_date":"2022-05-14","eligibility":"1"},
+{"exam_id":"43","user_id":"5","subject":"Digital Day IEEE-CCGRID 2022","mark":"0","cfu":"0.5","professor":"-","exam_date":"2022-05-16","eligibility":"1"},
+{"exam_id":"49","user_id":"11","subject":"Istituzione di Diritto Europeo","mark":"30","cfu":"9","professor":"Prof.re Jeans Woelk","exam_date":"2022-07-14","eligibility":"0"},
+{"exam_id":"50","user_id":"11","subject":"Introduzione all'Economia","mark":"28","cfu":"6","professor":"Prof.re Massimiliano Vatiero","exam_date":"2022-04-26","eligibility":"0"},
+{"exam_id":"52","user_id":"11","subject":"Chimica Molecolare ","mark":"0","cfu":"29","professor":"-","exam_date":"2022-11-20","eligibility":"1"}
+]
+}
+,{"type":"table","name":"infos","database":"my_mylibrettoprogetto","data":
+[
+{"user_id":"5","total_credits":"180","laude_value":"31","faculty":"Scienze e Tecnologie Informatiche","university":"University of Messina"},
+{"user_id":"11","total_credits":"300","laude_value":"31","faculty":"Giurisprudenza","university":"University of Trento"}
+]
+}
+,{"type":"table","name":"taxes","database":"my_mylibrettoprogetto","data":
+[
+{"tax_id":"5","user_id":"5","name":"Tassa Regionale A.A 2022\/2023","date":"2022-10-25","amount":"154.51","paid":"1"},
+{"tax_id":"6","user_id":"5","name":"Abbonamento ATM 2022\/23","date":"2022-10-25","amount":"30","paid":"1"},
+{"tax_id":"14","user_id":"11","name":"Immatricolazione","date":"2022-09-29","amount":"450","paid":"1"},
+{"tax_id":"15","user_id":"11","name":"Diritto allo studio","date":"2022-12-16","amount":"1300","paid":"0"}
+]
+}
+,{"type":"table","name":"users","database":"my_mylibrettoprogetto","data":
+[
+{"id":"5","name":"Danny","surname":"De Novi","email":"dannydenovi@gmail.com","password":"$2y$10$BG8VDn5sCvpbyDDyHOY2Huzede\/5nzXQp4X6x0mWpvKhcpsT\/17dC"},
+{"id":"11","name":"Maria Pia","surname":"Milazzo","email":"milazzomariapia12@gmail.com","password":"$2y$10$LnX3D7Qpnh3QEQ9Rg3ccAOxjsAxEeh\/UpGA0WBuZWeZgFIEZjCYua"}
+]
+}
+]
